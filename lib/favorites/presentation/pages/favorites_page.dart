@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tmdb_challenge/core/routes/routes.dart';
 
 class FavoritesPage extends StatelessWidget {
   const FavoritesPage({super.key});
@@ -13,12 +15,13 @@ class FavoritesPage extends StatelessWidget {
           'assets/tmdb_logo.svg',
           height: 15,
         ),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: const Icon(Icons.home),
-        //   ),
-        // ],
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            context.goNamed(AppRoutes.homePage);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: const Center(

@@ -23,17 +23,19 @@ class MovieScreenState extends ConsumerState<MovieDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: const ClampingScrollPhysics(),
-      slivers: [
-        _CustomSliverAppBar(movie: widget.movie),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) => _MovieDetails(movie: widget.movie),
-            childCount: 1,
-          ),
-        )
-      ],
+    return Scaffold(
+      body: CustomScrollView(
+        physics: const ClampingScrollPhysics(),
+        slivers: [
+          _CustomSliverAppBar(movie: widget.movie),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _MovieDetails(movie: widget.movie),
+              childCount: 1,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -52,18 +52,25 @@ class MoviesDatasourceImpl extends MoviesDatasource {
     }
   }
 
-  // @override
-  // Future<Movie> getMovieById({required String id}) async {
-  //   final dio = await _getDio();
-
-  //   try {
-  //     final dioResponse = await dio.get('/movie/$id');
-  //     final movieDetails = MovieDetails.fromJson( response.data );
-  //     final Movie movie = MovieMapper.movieDetailsToEntity(movieDetails);
-  //     return movie;
-
-  //   } on DioException catch (error) {
-  //     throw ExceptionUtils.getExceptionFromStatusCode(error);
-  //   }
-  // }
+  @override
+  Future<List<Movie>> searchMovies({required String query}) async {
+    if (query.isEmpty) return [];
+    final dio = await _getDio();
+    try {
+      final dioResponse = await dio.get(
+        '/search/movie',
+        queryParameters: {
+          'query': query,
+        },
+      );
+      final dbResponse = DbResponse.fromJson(dioResponse.data);
+      final List<Movie> movies = dbResponse.results
+          .where((moviedb) => moviedb.posterPath != 'no-poster') //
+          .map((e) => e) //
+          .toList();
+      return movies;
+    } on DioException catch (error) {
+      throw ExceptionUtils.getExceptionFromStatusCode(error);
+    }
+  }
 }

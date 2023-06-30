@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/favorites/presentation/pages/favorites_page.dart';
+import 'package:tmdb_challenge/login/presentation/pages/login_page.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart';
@@ -30,11 +31,12 @@ class AppRoutes {
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
-      // GoRoute(
-      //   path: '/loginScreen',
-      //   name: loginScreen,
-      //   builder: (context, state) => const LoginScreen(),
-      // ),
+      GoRoute(
+        path: '/loginPage',
+        name: loginPage,
+        builder: (context, state) => const LoginPage(),
+      ),
+
       GoRoute(
         path: '/favoritesPage',
         name: favoritesPage,
@@ -43,8 +45,10 @@ class AppRoutes {
 
       GoRoute(
         path: '/homePage',
-        name: favoritesPage,
-        builder: (context, state) => const HomePage(),
+        name: homePage,
+        builder: (context, state) => const HomePage(
+          child: NowPlayingTab(),
+        ),
       ),
 
       GoRoute(
