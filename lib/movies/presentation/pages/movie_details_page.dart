@@ -105,14 +105,19 @@ class _CustomSliverAppBar extends StatelessWidget {
           children: [
             // image //
             SizedBox.expand(
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) return const SizedBox();
-                  return FadeIn(child: child);
-                },
-              ),
+              child: movie.posterPath != null
+                  ? Image.network(
+                      movie.posterPath!,
+                      fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress != null) return const SizedBox();
+                        return FadeIn(child: child);
+                      },
+                    )
+                  : Image.asset(
+                      'assets/no-image.png',
+                      fit: BoxFit.cover,
+                    ),
             ),
 
             // top gradient //

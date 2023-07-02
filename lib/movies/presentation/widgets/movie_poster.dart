@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class MoviePoster extends StatelessWidget {
   final double? height;
-  final String posterPath;
+  final String? posterPath;
   final VoidCallback? onTap;
 
   const MoviePoster({
@@ -23,15 +23,22 @@ class MoviePoster extends StatelessWidget {
       from: random.nextInt(100) + 80,
       delay: Duration(milliseconds: random.nextInt(450) + 0),
       child: GestureDetector(
-        onTap: onTap != null ? () => onTap : null,
+        onTap: (onTap != null) ? () => onTap!() : null,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: FadeInImage(
-            height: height ?? 180,
-            fit: BoxFit.cover,
-            placeholder: const AssetImage('assets/bottle-loader.gif'),
-            image: NetworkImage(posterPath),
-          ),
+          child: posterPath != null
+              ? FadeInImage(
+                  height: height ?? 180,
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/bottle-loader.gif'),
+                  image: NetworkImage(posterPath!),
+                )
+              : FadeInImage(
+                  height: height ?? 180,
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/bottle-loader.gif'),
+                  image: const AssetImage('assets/no-image.png'),
+                ),
         ),
       ),
     );

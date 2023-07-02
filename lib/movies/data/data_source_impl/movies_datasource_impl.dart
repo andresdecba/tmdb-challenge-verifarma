@@ -66,7 +66,7 @@ class MoviesDatasourceImpl extends MoviesDatasource {
       final dioResponse = await dio.get(
         '/search/movie',
         queryParameters: {
-          'query': query,
+          'query': query.trim(),
         },
       );
 

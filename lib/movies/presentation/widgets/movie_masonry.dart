@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
 
 class MoviesGridView extends StatefulWidget {
   final List<Movie> movies;
@@ -55,44 +56,60 @@ class _MoviesGridViewState extends State<MoviesGridView> {
           return Column(
             children: [
               const SizedBox(height: 20),
-              _MoviePoster(movie: widget.movies[index]),
+              //_MoviePoster(movie: widget.movies[index]),
+              MoviePoster(
+                posterPath: widget.movies[index].posterPath,
+                height: 180,
+                onTap: () => context.pushNamed(
+                  AppRoutes.movieDetailsPage,
+                  extra: widget.movies[index],
+                ),
+              ),
             ],
           );
         }
 
-        return _MoviePoster(movie: widget.movies[index]);
+        //return _MoviePoster(movie: widget.movies[index]);
+        return MoviePoster(
+          posterPath: widget.movies[index].posterPath,
+          height: 180,
+          onTap: () => context.pushNamed(
+            AppRoutes.movieDetailsPage,
+            extra: widget.movies[index],
+          ),
+        );
       },
     );
   }
 }
 
-class _MoviePoster extends StatelessWidget {
-  final Movie movie;
+// class _MoviePoster extends StatelessWidget {
+//   final Movie movie;
 
-  const _MoviePoster({required this.movie});
+//   const _MoviePoster({required this.movie});
 
-  @override
-  Widget build(BuildContext context) {
-    final random = Random();
+//   @override
+//   Widget build(BuildContext context) {
+//     final random = Random();
 
-    return FadeInUp(
-      from: random.nextInt(100) + 80,
-      delay: Duration(milliseconds: random.nextInt(450) + 0),
-      child: GestureDetector(
-        onTap: () => context.pushNamed(
-          AppRoutes.movieDetailsPage,
-          extra: movie,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(5),
-          child: FadeInImage(
-            height: 180,
-            fit: BoxFit.cover,
-            placeholder: const AssetImage('assets/bottle-loader.gif'),
-            image: NetworkImage(movie.posterPath),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return FadeInUp(
+//       from: random.nextInt(100) + 80,
+//       delay: Duration(milliseconds: random.nextInt(450) + 0),
+//       child: GestureDetector(
+//         onTap: () => context.pushNamed(
+//           AppRoutes.movieDetailsPage,
+//           extra: movie,
+//         ),
+//         child: ClipRRect(
+//           borderRadius: BorderRadius.circular(5),
+//           child: FadeInImage(
+//             height: 180,
+//             fit: BoxFit.cover,
+//             placeholder: const AssetImage('assets/bottle-loader.gif'),
+//             image: NetworkImage(movie.posterPath),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

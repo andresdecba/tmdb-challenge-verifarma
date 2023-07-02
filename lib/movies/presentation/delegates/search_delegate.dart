@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:animate_do/animate_do.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/use_cases/search_movies_usecase.dart';
@@ -26,7 +24,7 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
   void _onSearchChanged() async {
     _isLoadingStream.add(true);
     // debounce y llamar
-    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _cancelTimer();
     _debounceTimer = Timer(
       const Duration(milliseconds: 666),
       () async {
@@ -52,23 +50,36 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
       initialData: init,
       stream: _debouncedMovies.stream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final data = snapshot.data ?? [];
+        final List<Movie> data = snapshot.data ?? [];
 
-        // LIST VIEW BDR //
-        return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _SearchItem(
-              movie: data[index],
-              onMovieSelected: () {
-                close(context, data);
-                EasyDebounce.cancel('search-debounce');
-              },
-            );
-          },
-        );
+        if (data.isEmpty) {
+          return _NoResultsItem(
+            child: Text(
+              'Sin resultados.',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
+            ),
+          );
+        } else {
+          // LIST VIEW BDR //
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _SearchItem(
+                movie: data[index],
+                onMovieSelected: () {
+                  close(context, data[index]);
+                  _cancelTimer();
+                },
+              );
+            },
+          );
+        }
       },
     );
+  }
+
+  void _cancelTimer() {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
   }
 
   // clear text button
@@ -103,7 +114,7 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
     return IconButton(
       onPressed: () {
         close(context, null);
-        EasyDebounce.cancel('search-debounce');
+        _cancelTimer();
       },
       icon: const Icon(Icons.arrow_back),
     );
@@ -122,6 +133,25 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
     print(':::: buildSuggestions ::::');
     _onSearchChanged();
     return _createSearchItemsList();
+  }
+}
+
+class _NoResultsItem extends StatelessWidget {
+  const _NoResultsItem({
+    super.key,
+    required this.child,
+  });
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      width: double.infinity,
+      alignment: Alignment.center,
+      child: child,
+    );
   }
 }
 
