@@ -69,7 +69,7 @@ class _MoviesGridViewState extends State<MoviesGridView> {
 class _MoviePoster extends StatelessWidget {
   final Movie movie;
 
-  const _MoviePoster({super.key, required this.movie});
+  const _MoviePoster({required this.movie});
 
   @override
   Widget build(BuildContext context) {

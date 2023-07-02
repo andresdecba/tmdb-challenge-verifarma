@@ -20,7 +20,7 @@ class FavoritesPage extends StatelessWidget {
           onPressed: () {
             context.goNamed(AppRoutes.homePage);
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
       ),
       extendBodyBehindAppBar: true,

@@ -10,7 +10,7 @@ class Movie extends Equatable {
   final String overview;
   final double popularity;
   final String posterPath;
-  final DateTime releaseDate;
+  final DateTime? releaseDate;
   final String title;
   final bool video;
   final double voteAverage;
@@ -26,12 +26,17 @@ class Movie extends Equatable {
     required this.overview,
     required this.popularity,
     required this.posterPath,
-    required this.releaseDate,
+    this.releaseDate,
     required this.title,
     required this.video,
     required this.voteAverage,
     required this.voteCount,
   });
+
+  @override
+  String toString() {
+    return 'title: $title, poster $posterPath';
+  }
 
   @override
   List<Object?> get props => [id, title];

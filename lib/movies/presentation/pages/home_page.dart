@@ -27,12 +27,15 @@ class HomePage extends ConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              /// provider
+              // SEARCH MOVIES //
               final searchMovies = ref.read(searchMoviesProvider);
               showSearch(
                 context: context,
                 delegate: SearchMoviesDelegate(useCase: searchMovies),
-              );
+              ).then((value) {
+                if (value == null) return;
+                context.pushNamed(AppRoutes.movieDetailsPage, extra: value);
+              });
             },
             icon: const Icon(Icons.search),
           ),

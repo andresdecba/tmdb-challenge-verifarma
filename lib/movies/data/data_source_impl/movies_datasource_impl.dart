@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:tmdb_challenge/core/network/exceptions.dart';
-import 'package:tmdb_challenge/movies/data/models/db_response.dart';
+import 'package:tmdb_challenge/movies/data/mappers/movie_mapper.dart';
+import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/movies_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -34,6 +35,7 @@ class MoviesDatasourceImpl extends MoviesDatasource {
   @override
   Future<List<Movie>> getMovies({required int page, required String moviesList}) async {
     final dio = await _getDio();
+
     try {
       final dioResponse = await dio.get(
         '/movie/$moviesList', //'/movie/now_playing',
@@ -41,12 +43,16 @@ class MoviesDatasourceImpl extends MoviesDatasource {
           'page': page,
         },
       );
-      final dbResponse = DbResponse.fromJson(dioResponse.data);
-      final List<Movie> movies = dbResponse.results
-          .where((moviedb) => moviedb.posterPath != 'no-poster') //
-          .map((e) => e) //
-          .toList();
-      return movies;
+
+      final result = List<Movie>.from(
+        dioResponse.data["results"].map(
+          (e) => MovieMapper.movieMapper(
+            TMDBMovieModel.fromJson(e),
+          ),
+        ),
+      );
+
+      return result;
     } on DioException catch (error) {
       throw ExceptionUtils.getExceptionFromStatusCode(error);
     }
@@ -63,12 +69,16 @@ class MoviesDatasourceImpl extends MoviesDatasource {
           'query': query,
         },
       );
-      final dbResponse = DbResponse.fromJson(dioResponse.data);
-      final List<Movie> movies = dbResponse.results
-          .where((moviedb) => moviedb.posterPath != 'no-poster') //
-          .map((e) => e) //
-          .toList();
-      return movies;
+
+      final result = List<Movie>.from(
+        dioResponse.data["results"].map(
+          (e) => MovieMapper.movieMapper(
+            TMDBMovieModel.fromJson(e),
+          ),
+        ),
+      );
+
+      return result;
     } on DioException catch (error) {
       throw ExceptionUtils.getExceptionFromStatusCode(error);
     }

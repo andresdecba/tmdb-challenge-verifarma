@@ -64,7 +64,7 @@ class _MovieDetails extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.star),
+                const Icon(Icons.star),
                 Text(movie.voteAverage.toString()),
               ],
             ),

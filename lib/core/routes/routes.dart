@@ -26,6 +26,8 @@ class AppRoutes {
   static const topRatedTab = 'topRatedTab';
   static const upcomingTab = 'upcomingTab';
 
+  // TODO ver: https://github.com/snehmehta/dynamic-route/blob/main/lib/router.dart
+
   static final appRoutes = GoRouter(
     initialLocation: '/nowPlaying',
     navigatorKey: rootNavigatorKey,
