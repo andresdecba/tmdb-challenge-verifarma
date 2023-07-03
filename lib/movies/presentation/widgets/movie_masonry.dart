@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +44,7 @@ class _MoviesGridViewState extends State<MoviesGridView> {
   @override
   Widget build(BuildContext context) {
     return MasonryGridView.count(
+      shrinkWrap: true,
       controller: scrollController,
       crossAxisCount: 3,
       mainAxisSpacing: 10,
@@ -56,7 +55,6 @@ class _MoviesGridViewState extends State<MoviesGridView> {
           return Column(
             children: [
               const SizedBox(height: 20),
-              //_MoviePoster(movie: widget.movies[index]),
               MoviePoster(
                 posterPath: widget.movies[index].posterPath,
                 height: 180,
@@ -68,8 +66,6 @@ class _MoviesGridViewState extends State<MoviesGridView> {
             ],
           );
         }
-
-        //return _MoviePoster(movie: widget.movies[index]);
         return MoviePoster(
           posterPath: widget.movies[index].posterPath,
           height: 180,
@@ -82,34 +78,3 @@ class _MoviesGridViewState extends State<MoviesGridView> {
     );
   }
 }
-
-// class _MoviePoster extends StatelessWidget {
-//   final Movie movie;
-
-//   const _MoviePoster({required this.movie});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final random = Random();
-
-//     return FadeInUp(
-//       from: random.nextInt(100) + 80,
-//       delay: Duration(milliseconds: random.nextInt(450) + 0),
-//       child: GestureDetector(
-//         onTap: () => context.pushNamed(
-//           AppRoutes.movieDetailsPage,
-//           extra: movie,
-//         ),
-//         child: ClipRRect(
-//           borderRadius: BorderRadius.circular(5),
-//           child: FadeInImage(
-//             height: 180,
-//             fit: BoxFit.cover,
-//             placeholder: const AssetImage('assets/bottle-loader.gif'),
-//             image: NetworkImage(movie.posterPath),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

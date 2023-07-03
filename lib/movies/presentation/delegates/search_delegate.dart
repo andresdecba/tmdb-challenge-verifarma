@@ -98,7 +98,6 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
               child: IconButton(onPressed: () => query = '', icon: const Icon(Icons.refresh_rounded)),
             );
           }
-
           return FadeIn(
             animate: query.isNotEmpty,
             child: IconButton(onPressed: () => query = '', icon: const Icon(Icons.clear)),
@@ -138,7 +137,6 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
 
 class _NoResultsItem extends StatelessWidget {
   const _NoResultsItem({
-    super.key,
     required this.child,
   });
 
@@ -159,7 +157,7 @@ class _SearchItem extends StatelessWidget {
   final Movie movie;
   final VoidCallback onMovieSelected;
 
-  const _SearchItem({super.key, required this.movie, required this.onMovieSelected});
+  const _SearchItem({required this.movie, required this.onMovieSelected});
 
   @override
   Widget build(BuildContext context) {

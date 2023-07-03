@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/data/repositories_impl/movies_repository_impl.dart';
@@ -52,25 +54,43 @@ class GetMoviesListController extends StateNotifier<List<Movie>> {
 
   GetMoviesListUseCase useCase;
 
-  int currentPage = 1;
+  int currentPage = 0;
   bool isLoading = false;
+  Timer? _debounceTimer;
 
   Future<void> nextPage() async {
     if (isLoading) {
       return;
     } else {
-      isLoading = true;
-      currentPage++;
-      final result = await useCase.call(page: currentPage);
-      result.fold(
-        (failure) {
-          failure.showError();
-        },
-        (data) {
-          state = [...state, ...data];
+      // debounce Call //
+      _cancelTimer();
+      _debounceTimer = Timer(
+        const Duration(milliseconds: 666),
+        () async {
+          isLoading = true;
+          currentPage++;
+          final result = await useCase.call(page: currentPage);
+          result.fold(
+            (failure) {
+              failure.showError();
+            },
+            (data) {
+              state = [...state, ...data];
+            },
+          );
+          isLoading = false;
         },
       );
-      isLoading = false;
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cancelTimer();
+  }
+
+  void _cancelTimer() {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
   }
 }

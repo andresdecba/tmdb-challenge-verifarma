@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/movies_provider.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_masonry.dart';
 
 class TopRatedTab extends ConsumerStatefulWidget {

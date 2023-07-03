@@ -28,4 +28,11 @@ class MovieRepositoryImpl extends MoviesRepository {
       () async => datasource.searchMovies(query: query),
     );
   }
+
+  @override
+  Future<Either<Failure, Movie>> getMovie({required String movieId}) {
+    return ApiNetwork.call(
+      () async => datasource.getMovie(movieId: movieId),
+    );
+  }
 }

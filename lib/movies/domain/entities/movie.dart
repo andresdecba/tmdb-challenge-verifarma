@@ -35,7 +35,7 @@ class Movie extends Equatable {
 
   @override
   String toString() {
-    return 'title: $title, poster $posterPath';
+    return 'title wachooo: $title, poster $posterPath';
   }
 
   @override

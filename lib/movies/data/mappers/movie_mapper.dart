@@ -1,3 +1,4 @@
+import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
 import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 
@@ -20,7 +21,25 @@ class MovieMapper {
       voteCount: movieDB.voteCount ?? 0,
     );
   }
+
+  static Movie movieDetailsMapper(MovieDetailsModel movieDB) {
+    return Movie(
+      id: movieDB.id,
+      adult: false,
+      backdropPath: null,
+      genreIds: _noGenreIds,
+      originalLanguage: '',
+      originalTitle: '',
+      overview: '',
+      popularity: 0.0,
+      posterPath: (movieDB.posterPath != null) ? 'https://image.tmdb.org/t/p/w500${movieDB.posterPath}' : null,
+      releaseDate: null,
+      title: movieDB.title ?? '',
+      video: false,
+      voteAverage: movieDB.voteAverage ?? 0.0,
+      voteCount: 0,
+    );
+  }
 }
 
-const String _noPoster = 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
 const List<int> _noGenreIds = [];
