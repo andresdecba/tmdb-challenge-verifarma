@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tmdb_challenge/borrar/prueba_riverpod_page.dart';
 import 'package:tmdb_challenge/login/presentation/pages/login_page.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/favorites_page.dart';
@@ -32,6 +33,12 @@ class AppRoutes {
     initialLocation: '/nowPlaying',
     navigatorKey: rootNavigatorKey,
     routes: [
+      GoRoute(
+        path: '/prueba',
+        name: 'prueba',
+        builder: (context, state) => const PruebaRiverpodPage(),
+      ),
+
       // routes
       GoRoute(
         path: '/loginPage',

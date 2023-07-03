@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
+import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 
 class MovieDetailsPage extends ConsumerStatefulWidget {
@@ -18,7 +20,6 @@ class MovieScreenState extends ConsumerState<MovieDetailsPage> {
   @override
   void initState() {
     super.initState();
-    //ref.read(movieDetailsProvider.notifier);
   }
 
   @override
@@ -40,6 +41,7 @@ class MovieScreenState extends ConsumerState<MovieDetailsPage> {
   }
 }
 
+// DESCRIPCION //
 class _MovieDetails extends StatelessWidget {
   final Movie movie;
 
@@ -86,10 +88,45 @@ class _MovieDetails extends StatelessWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends StatefulWidget {
   final Movie movie;
+  const _CustomSliverAppBar({
+    required this.movie,
+  });
 
-  const _CustomSliverAppBar({required this.movie});
+  @override
+  State<_CustomSliverAppBar> createState() => _CustomSliverAppBarState();
+}
+
+class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
+  late bool _isFav;
+  late StorageDatasource _storage;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFav = widget.movie.isFavorite;
+    _storage = StorageDatasourceImpl();
+  }
+
+  void _addRemoveFav() {
+    // 1- setear estado
+    setState(() {
+      _isFav = !_isFav;
+    });
+
+    // 2- cambió a true, agregar
+    if (_isFav == true) {
+      _storage.saveFavorite(widget.movie.id.toString());
+      widget.movie.isFavorite = true;
+    }
+
+    // 3- cambió a false, quitar
+    if (_isFav == false) {
+      _storage.removeFavorite(widget.movie.id.toString());
+      widget.movie.isFavorite = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +142,9 @@ class _CustomSliverAppBar extends StatelessWidget {
           children: [
             // image //
             SizedBox.expand(
-              child: movie.posterPath != null
+              child: widget.movie.posterPath != null
                   ? Image.network(
-                      movie.posterPath!,
+                      widget.movie.posterPath!,
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress != null) return const SizedBox();
@@ -157,11 +194,18 @@ class _CustomSliverAppBar extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   padding: const EdgeInsets.all(20),
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                  ),
+                  onPressed: () => _addRemoveFav(),
+                  icon: _isFav
+                      ? const Icon(
+                          Icons.favorite_rounded,
+                          color: Colors.red,
+                          size: 30,
+                        )
+                      : const Icon(
+                          Icons.favorite_border_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                 ),
               ),
             )

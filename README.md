@@ -18,6 +18,7 @@
 
 *** RIVERPOD ***
 /// provider de sólo lectura: ///
+// sirve par aalmacenar un valor y leerlo globalmente
 
 provider:
 final soloLecturaProvider = Provider<String>((ref) {

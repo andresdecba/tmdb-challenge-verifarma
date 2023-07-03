@@ -1,16 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:tmdb_challenge/core/network/exceptions.dart';
 import 'package:tmdb_challenge/core/network/dio_client.dart';
-import 'package:tmdb_challenge/movies/data/mappers/movie_details_mapper.dart';
 import 'package:tmdb_challenge/movies/data/mappers/movie_mapper.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
 import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/movies_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
-import 'package:tmdb_challenge/movies/domain/entities/movie_details.dart';
 
 // CORE -> DOMAIN -> DATA -> USE_CASES -> PRESENTATION
 class MoviesDatasourceImpl extends MoviesDatasource {
+  // mapper
+  final MovieMapper mapper = MovieMapper();
+
   @override
   Future<List<Movie>> getMovies({required int page, required String moviesList}) async {
     final dio = await DioClient.callDio();
@@ -25,7 +26,7 @@ class MoviesDatasourceImpl extends MoviesDatasource {
 
       final result = List<Movie>.from(
         dioResponse.data["results"].map(
-          (e) => MovieMapper.movieMapper(
+          (e) => mapper.movieMapper(
             TMDBMovieModel.fromJson(e),
           ),
         ),
@@ -51,7 +52,7 @@ class MoviesDatasourceImpl extends MoviesDatasource {
 
       final result = List<Movie>.from(
         dioResponse.data["results"].map(
-          (e) => MovieMapper.movieMapper(
+          (e) => mapper.movieMapper(
             TMDBMovieModel.fromJson(e),
           ),
         ),
@@ -72,7 +73,7 @@ class MoviesDatasourceImpl extends MoviesDatasource {
         '/movie/$movieId',
       );
 
-      final result = MovieMapper.movieDetailsMapper(
+      final result = mapper.movieDetailsMapper(
         MovieDetailsModel.fromJson(dioResponse.data),
       );
 

@@ -1,9 +1,11 @@
+import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
 import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
+import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 
 class MovieMapper {
-  static Movie movieMapper(TMDBMovieModel movieDB) {
+  Movie movieMapper(TMDBMovieModel movieDB) {
     return Movie(
       id: movieDB.id,
       adult: movieDB.adult ?? false,
@@ -19,10 +21,11 @@ class MovieMapper {
       video: movieDB.video ?? false,
       voteAverage: movieDB.voteAverage ?? 0.0,
       voteCount: movieDB.voteCount ?? 0,
+      isFavorite: isFavorite(movieDB.id),
     );
   }
 
-  static Movie movieDetailsMapper(MovieDetailsModel movieDB) {
+  Movie movieDetailsMapper(MovieDetailsModel movieDB) {
     return Movie(
       id: movieDB.id,
       adult: false,
@@ -30,7 +33,7 @@ class MovieMapper {
       genreIds: _noGenreIds,
       originalLanguage: '',
       originalTitle: '',
-      overview: '',
+      overview: movieDB.overview ?? '',
       popularity: 0.0,
       posterPath: (movieDB.posterPath != null) ? 'https://image.tmdb.org/t/p/w500${movieDB.posterPath}' : null,
       releaseDate: null,
@@ -38,7 +41,21 @@ class MovieMapper {
       video: false,
       voteAverage: movieDB.voteAverage ?? 0.0,
       voteCount: 0,
+      isFavorite: isFavorite(movieDB.id),
     );
+  }
+
+  final StorageDatasource _storage = StorageDatasourceImpl();
+
+  bool isFavorite(int movieId) {
+    bool match = false;
+    var list = _storage.getFavorites();
+    for (var e in list) {
+      if (e == movieId.toString()) {
+        match = true;
+      }
+    }
+    return match;
   }
 }
 

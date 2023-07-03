@@ -15,8 +15,10 @@ class Movie extends Equatable {
   final bool video;
   final double voteAverage;
   final int voteCount;
+  bool isFavorite;
 
-  const Movie({
+  Movie({
+    required this.isFavorite,
     required this.adult,
     this.backdropPath,
     required this.genreIds,
