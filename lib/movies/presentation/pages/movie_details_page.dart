@@ -4,6 +4,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
+import 'package:collection/collection.dart';
 
 class MovieDetailsPage extends ConsumerStatefulWidget {
   const MovieDetailsPage({
@@ -88,17 +90,17 @@ class _MovieDetails extends StatelessWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatefulWidget {
+class _CustomSliverAppBar extends ConsumerStatefulWidget {
   final Movie movie;
   const _CustomSliverAppBar({
     required this.movie,
   });
 
   @override
-  State<_CustomSliverAppBar> createState() => _CustomSliverAppBarState();
+  _CustomSliverAppBarState createState() => _CustomSliverAppBarState();
 }
 
-class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
+class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
   late bool _isFav;
   late StorageDatasource _storage;
 
@@ -110,6 +112,11 @@ class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
   }
 
   void _addRemoveFav() {
+    final a = ref.watch(nowPlayingProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
+    final b = ref.watch(popularProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
+    final c = ref.watch(topRatedProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
+    final d = ref.watch(upcomingProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
+
     // 1- setear estado
     setState(() {
       _isFav = !_isFav;
@@ -119,12 +126,20 @@ class _CustomSliverAppBarState extends State<_CustomSliverAppBar> {
     if (_isFav == true) {
       _storage.saveFavorite(widget.movie.id.toString());
       widget.movie.isFavorite = true;
+      if (a != null) a.isFavorite = true;
+      if (b != null) b.isFavorite = true;
+      if (c != null) c.isFavorite = true;
+      if (d != null) d.isFavorite = true;
     }
 
     // 3- cambió a false, quitar
     if (_isFav == false) {
       _storage.removeFavorite(widget.movie.id.toString());
       widget.movie.isFavorite = false;
+      if (a != null) a.isFavorite = false;
+      if (b != null) b.isFavorite = false;
+      if (c != null) c.isFavorite = false;
+      if (d != null) d.isFavorite = false;
     }
   }
 
