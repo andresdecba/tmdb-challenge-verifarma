@@ -29,7 +29,7 @@ class AppRoutes {
   // TODO ver: https://github.com/snehmehta/dynamic-route/blob/main/lib/router.dart
 
   static final appRoutes = GoRouter(
-    initialLocation: '/loginPage', // '/nowPlaying',
+    initialLocation: '/nowPlaying', // TODO CAMBIAR RUTA A -> '/loginPage'
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes

@@ -13,18 +13,24 @@ class PopularTabState extends ConsumerState<PopularTab> {
   @override
   void initState() {
     super.initState();
-    ref.read(popularProvider.notifier).nextPage();
+    ref.read(popularAsync.notifier).nextPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingWatch = ref.watch(popularProvider);
+    final provider = ref.watch(popularAsync);
 
-    return MoviesGridView(
-      movies: nowPlayingWatch,
-      loadNextPage: () {
-        ref.read(popularProvider.notifier).nextPage();
-      },
+    return provider.when(
+      data: (data) => MoviesGridView(
+        movies: data,
+        loadNextPage: () {
+          ref.read(popularAsync.notifier).nextPage();
+        },
+      ),
+      error: (error, stackTrace) => Text(error.toString()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

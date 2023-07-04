@@ -13,18 +13,24 @@ class UpcomingTabState extends ConsumerState<UpcomingTab> {
   @override
   void initState() {
     super.initState();
-    ref.read(upcomingProvider.notifier).nextPage();
+    ref.read(upcomingAsync.notifier).nextPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingWatch = ref.watch(upcomingProvider);
+    final provider = ref.watch(upcomingAsync);
 
-    return MoviesGridView(
-      movies: nowPlayingWatch,
-      loadNextPage: () {
-        ref.read(upcomingProvider.notifier).nextPage();
-      },
+    return provider.when(
+      data: (data) => MoviesGridView(
+        movies: data,
+        loadNextPage: () {
+          ref.read(upcomingAsync.notifier).nextPage();
+        },
+      ),
+      error: (error, stackTrace) => Text(error.toString()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

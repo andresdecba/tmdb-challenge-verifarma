@@ -13,18 +13,24 @@ class TopRatedTabState extends ConsumerState<TopRatedTab> {
   @override
   void initState() {
     super.initState();
-    ref.read(topRatedProvider.notifier).nextPage();
+    ref.read(topRatedAsync.notifier).nextPage();
   }
 
   @override
   Widget build(BuildContext context) {
-    final nowPlayingWatch = ref.watch(topRatedProvider);
+    final provider = ref.watch(topRatedAsync);
 
-    return MoviesGridView(
-      movies: nowPlayingWatch,
-      loadNextPage: () {
-        ref.read(topRatedProvider.notifier).nextPage();
-      },
+    return provider.when(
+      data: (data) => MoviesGridView(
+        movies: data,
+        loadNextPage: () {
+          ref.read(topRatedAsync.notifier).nextPage();
+        },
+      ),
+      error: (error, stackTrace) => Text(error.toString()),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

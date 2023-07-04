@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
         child: Form(
           key: formStateKey,
           child: Column(

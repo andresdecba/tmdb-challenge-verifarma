@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/data/repositories_impl/movies_repository_impl.dart';
@@ -7,81 +6,77 @@ import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/use_cases/get_movies_list_usecase.dart';
 
 // NOW PLAYING //
-final nowPlayingProvider = StateNotifierProvider<GetMoviesListController, List<Movie>>((ref) {
+final nowPlayingAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
   final useCase = GetMoviesListUseCase(
     MovieRepositoryImpl(MoviesDatasourceImpl()),
     'now_playing',
   );
-
-  return GetMoviesListController(useCase: useCase);
+  return GetMoviesListAsyncController(useCase: useCase);
 });
 
 // POPULAR //
-final popularProvider = StateNotifierProvider<GetMoviesListController, List<Movie>>((ref) {
+final popularAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
   final useCase = GetMoviesListUseCase(
     MovieRepositoryImpl(MoviesDatasourceImpl()),
     'popular',
   );
-
-  return GetMoviesListController(useCase: useCase);
+  return GetMoviesListAsyncController(useCase: useCase);
 });
 
-// TOP RATING //
-final topRatedProvider = StateNotifierProvider<GetMoviesListController, List<Movie>>((ref) {
+// TOP RATED //
+final topRatedAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
   final useCase = GetMoviesListUseCase(
     MovieRepositoryImpl(MoviesDatasourceImpl()),
     'top_rated',
   );
-
-  return GetMoviesListController(useCase: useCase);
+  return GetMoviesListAsyncController(useCase: useCase);
 });
 
 // UPCOMING //
-final upcomingProvider = StateNotifierProvider<GetMoviesListController, List<Movie>>((ref) {
+final upcomingAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
   final useCase = GetMoviesListUseCase(
     MovieRepositoryImpl(MoviesDatasourceImpl()),
     'upcoming',
   );
-
-  return GetMoviesListController(useCase: useCase);
+  return GetMoviesListAsyncController(useCase: useCase);
 });
 
-// PROVIDERS CONTROLLER //
-class GetMoviesListController extends StateNotifier<List<Movie>> {
-  GetMoviesListController({
+class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>> {
+  GetMoviesListAsyncController({
     required this.useCase,
-  }) : super([]);
+  }) : super(const AsyncValue.loading()) {
+    [];
+  }
 
   GetMoviesListUseCase useCase;
 
   int currentPage = 0;
-  bool isLoading = false;
   Timer? _debounceTimer;
 
   Future<void> nextPage() async {
-    if (isLoading) {
-      return;
-    } else {
-      // debounce Call //
-      _cancelTimer();
-      _debounceTimer = Timer(
-        const Duration(milliseconds: 666),
-        () async {
-          isLoading = true;
-          currentPage++;
-          final result = await useCase.call(page: currentPage);
-          result.fold(
-            (failure) {
-              failure.showError();
-            },
-            (data) {
-              state = [...state, ...data];
-            },
-          );
-          isLoading = false;
-        },
-      );
-    }
+    if (currentPage == 0) state = const AsyncValue.loading();
+
+    _cancelTimer();
+    _debounceTimer = Timer(
+      const Duration(milliseconds: 666),
+      () async {
+        currentPage++;
+        final result = await useCase.call(page: currentPage);
+        result.fold(
+          (failure) {
+            failure.showError();
+            //state = AsyncValue.error(failure, StackTrace.current);
+          },
+          (data) {
+            if (state.value != null) {
+              state = AsyncValue.data([...state.value!, ...data]);
+            } else {
+              state = AsyncValue.data([...data]);
+            }
+          },
+        );
+      },
+    );
   }
 
   @override
