@@ -4,6 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
 import 'package:collection/collection.dart';
 
@@ -112,6 +113,7 @@ class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
   }
 
   void _addRemoveFav() {
+    final favoritePageSate = ref.watch(favoritesProvider);
     final a = ref.watch(nowPlayingProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
     final b = ref.watch(popularProvider).firstWhereOrNull((element) => element.id == widget.movie.id);
     final c = ref.watch(topRatedProvider).firstWhereOrNull((element) => element.id == widget.movie.id);

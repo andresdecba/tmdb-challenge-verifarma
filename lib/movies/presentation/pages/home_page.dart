@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/seach_movies_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
 
@@ -40,7 +41,10 @@ class HomePage extends ConsumerWidget {
             icon: const Icon(Icons.search),
           ),
           IconButton(
-            onPressed: () => context.goNamed(AppRoutes.favoritesPage),
+            onPressed: () {
+              ref.watch(seeeeeeeeeee.notifier).getFavorites();
+              context.goNamed(AppRoutes.favoritesPage);
+            },
             icon: const Icon(Icons.favorite),
           ),
         ],
