@@ -42,7 +42,7 @@ class HomePage extends ConsumerWidget {
           ),
           IconButton(
             onPressed: () {
-              ref.watch(seeeeeeeeeee.notifier).getFavorites();
+              ref.read(favoriteProviderAsync.notifier).getFavorites();
               context.goNamed(AppRoutes.favoritesPage);
             },
             icon: const Icon(Icons.favorite),

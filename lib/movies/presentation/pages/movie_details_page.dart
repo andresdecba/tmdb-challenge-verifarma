@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
-import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
+// ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
 class MovieDetailsPage extends ConsumerStatefulWidget {
@@ -102,16 +102,17 @@ class _CustomSliverAppBar extends ConsumerStatefulWidget {
 
 class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
   late bool _isFav;
-  late StorageDatasource _storage;
 
   @override
   void initState() {
     super.initState();
     _isFav = widget.movie.isFavorite;
-    _storage = StorageDatasourceImpl();
   }
 
   void _addRemoveFav() {
+    final storage = ref.read(storageProvider);
+    final favs = ref.read(favoriteProviderAsync.notifier);
+
     // 0- actualizar el estado de las pantallas
     Movie? a;
     if (ref.watch(nowPlayingAsync).value != null) {
@@ -137,22 +138,24 @@ class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
 
     // 2- cambió a true, agregar
     if (_isFav == true) {
-      _storage.saveFavorite(widget.movie.id.toString());
+      storage.saveFavorite(widget.movie.id.toString());
       widget.movie.isFavorite = true;
       if (a != null) a.isFavorite = true;
       if (b != null) b.isFavorite = true;
       if (c != null) c.isFavorite = true;
       if (d != null) d.isFavorite = true;
+      favs.add(widget.movie);
     }
 
     // 3- cambió a false, quitar
     if (_isFav == false) {
-      _storage.removeFavorite(widget.movie.id.toString());
+      storage.removeFavorite(widget.movie.id.toString());
       widget.movie.isFavorite = false;
       if (a != null) a.isFavorite = false;
       if (b != null) b.isFavorite = false;
       if (c != null) c.isFavorite = false;
       if (d != null) d.isFavorite = false;
+      favs.remove(widget.movie);
     }
   }
 
