@@ -52,6 +52,15 @@ class _LoginPageState extends State<LoginPage> {
                 'assets/tmdb_logo.svg',
                 height: 25,
               ),
+              const SizedBox(height: 10),
+
+              Text(
+                'Verifarma  challenge',
+                style: textStyle.bodyMedium!.copyWith(
+                  color: Colors.grey.shade700,
+                  letterSpacing: 3,
+                ),
+              ),
               const SizedBox(height: 50),
 
               // email
@@ -60,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: _inputDecoration(
                   labelText: 'Email',
-                  hintText: 'Enter valid email id as abc@gmail.com',
+                  hintText: 'email@email.com',
                   sufixIcon: Icons.clear_rounded,
                   onTap: () => emailCtrlr.clear(),
                 ),
@@ -81,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.visiblePassword,
                 decoration: _inputDecoration(
                   labelText: 'Password',
-                  hintText: 'Enter secure password',
+                  hintText: 'Ingrese su password',
                   sufixIcon: showPassword == true ? Icons.visibility_rounded : Icons.visibility_off_outlined,
                   onTap: () {
                     setState(() {
@@ -116,6 +125,15 @@ class _LoginPageState extends State<LoginPage> {
                     'Login',
                     style: textStyle.titleLarge,
                   ),
+                ),
+              ),
+              // ayuda
+              const SizedBox(height: 20),
+
+              Text(
+                '[  user: $_loginEmail / pass: $_loginPassWord  ]',
+                style: textStyle.bodyMedium!.copyWith(
+                  color: Colors.grey.shade700,
                 ),
               ),
               const SizedBox(height: 40),
