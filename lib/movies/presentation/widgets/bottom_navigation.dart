@@ -20,6 +20,7 @@ class MyBottomNavigation extends ConsumerWidget {
       selectedItemColor: Colors.white,
       unselectedFontSize: 11,
       selectedFontSize: 11,
+      iconSize: 24,
       onTap: (value) {
         _onTap(context: context, index: value, ref: ref);
         ref.read(_bottomNavigationBarProvider.notifier).setCurrentIndex(value);

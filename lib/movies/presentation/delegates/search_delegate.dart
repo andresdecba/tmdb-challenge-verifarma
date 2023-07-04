@@ -38,7 +38,6 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
             _debouncedMovies.add(data);
           },
         );
-        print(':::: _onSearchChanged ::::');
       },
     );
     _isLoadingStream.add(false);
@@ -61,20 +60,23 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
           );
         } else {
           // LIST VIEW BDR //
-          return ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return MovieTile(
-                movie: data[index],
-                onMovieSelected: () {
-                  close(
-                    context,
-                    data[index],
-                  );
-                  _cancelTimer();
-                },
-              );
-            },
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return MovieTile(
+                  movie: data[index],
+                  onMovieSelected: () {
+                    close(
+                      context,
+                      data[index],
+                    );
+                    _cancelTimer();
+                  },
+                );
+              },
+            ),
           );
         }
       },
@@ -132,7 +134,6 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
   // this method is fires every time we press a character
   @override
   Widget buildSuggestions(BuildContext context) {
-    print(':::: buildSuggestions ::::');
     _onSearchChanged();
     return _createSearchItemsList();
   }

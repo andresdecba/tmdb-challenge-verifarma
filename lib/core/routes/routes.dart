@@ -26,10 +26,8 @@ class AppRoutes {
   static const topRatedTab = 'topRatedTab';
   static const upcomingTab = 'upcomingTab';
 
-  // TODO ver: https://github.com/snehmehta/dynamic-route/blob/main/lib/router.dart
-
   static final appRoutes = GoRouter(
-    initialLocation: '/nowPlaying', // TODO CAMBIAR RUTA A -> '/loginPage'
+    initialLocation: '/loginPage',
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
@@ -69,10 +67,11 @@ class AppRoutes {
         builder: (context, state, child) => HomePage(child: child),
         routes: [
           GoRoute(
-            path: '/nowPlaying',
-            name: nowPlayingTab,
-            builder: (context, state) => const NowPlayingTab(),
-          ),
+              path: '/nowPlaying',
+              name: nowPlayingTab,
+              builder: (context, state) {
+                return const NowPlayingTab();
+              }),
           GoRoute(
             path: '/popularTab',
             name: popularTab,

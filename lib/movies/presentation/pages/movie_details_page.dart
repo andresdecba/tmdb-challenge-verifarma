@@ -60,6 +60,16 @@ class _MovieDetails extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          Text(
+            movie.title,
+            style: textStyles.titleLarge,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            movie.overview,
+            overflow: TextOverflow.clip,
+          ),
+          const SizedBox(height: 20),
           FilledButton.tonal(
             style: const ButtonStyle(
               visualDensity: VisualDensity.compact,
@@ -74,16 +84,6 @@ class _MovieDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            movie.title,
-            style: textStyles.titleLarge,
-          ),
-          const SizedBox(height: 20),
-          Text(
-            movie.overview,
-            overflow: TextOverflow.clip,
-          ),
-          const SizedBox(height: 50),
         ],
       ),
     );
@@ -195,7 +195,7 @@ class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.0, 0.2],
+                    stops: [0.1, 0.25],
                     colors: [
                       Colors.black,
                       Colors.transparent,

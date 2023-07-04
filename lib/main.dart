@@ -13,6 +13,7 @@ Future<void> initHive() async {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await initHive();
   runApp(
     const ProviderScope(

@@ -52,7 +52,7 @@ class HomePage extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       bottomNavigationBar: const MyBottomNavigation(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
         child: child,
       ),
     );

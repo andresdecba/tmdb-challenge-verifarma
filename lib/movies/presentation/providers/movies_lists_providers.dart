@@ -49,7 +49,6 @@ class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>
   }
 
   GetMoviesListUseCase useCase;
-
   int currentPage = 0;
   Timer? _debounceTimer;
 

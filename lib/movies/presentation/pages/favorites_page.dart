@@ -12,6 +12,7 @@ class FavoritesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final provider = ref.watch(favoriteProviderAsync);
+    final textStyle = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -29,11 +30,18 @@ class FavoritesPage extends ConsumerWidget {
         ),
       ),
       body: provider.when(
+        error: (error, stackTrace) => Text(error.toString()),
+        loading: () => const Center(child: CircularProgressIndicator()),
         data: (data) {
-          // return MoviesGridView(
-          //   movies: data,
-          //   loadNextPage: () {},
-          // );
+          if (data.isEmpty) {
+            return Center(
+              child: Text(
+                'No tienes ningun favorito.',
+                style: textStyle.titleLarge!.copyWith(color: Colors.grey),
+              ),
+            );
+          }
+
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: ListView.builder(
@@ -46,7 +54,6 @@ class FavoritesPage extends ConsumerWidget {
                 return MovieTile(
                   movie: data[index],
                   onMovieSelected: () {
-                    //ref.read(favoriteProviderAsync.notifier).remove(data[index]);
                     context.pushNamed(
                       AppRoutes.movieDetailsPage,
                       extra: data[index],
@@ -57,10 +64,6 @@ class FavoritesPage extends ConsumerWidget {
             ),
           );
         },
-        error: (error, stackTrace) => Text(error.toString()),
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
-        ),
       ),
     );
   }
