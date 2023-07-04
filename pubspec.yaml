@@ -42,9 +42,14 @@ flutter:
 
 flutter_native_splash:
   color: "#000000"
-  image: "assets/splash.png"
-  android: true
-  ios: true
+  image: assets/splash.png
+  image_dark: assets/splash.png
+  android_12:
+    image: assets/splash.png
+    icon_background_color: "#000000"
+    image_dark: assets/splash.png
+    icon_background_color_dark: "#000000"
+  web: false
 
 icons_launcher:
   image_path: "assets/ic_logo.png"
