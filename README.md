@@ -8,12 +8,12 @@ Linked in: https://www.linkedin.com/in/andres-pugliese
 Mi playstore: https://play.google.com/store/apps/details?id=site.thisweek  
 
 ## Levantar app
-1- clonar el repositorio
-2- ejecutar flutter pub get
-3- para el login:
-    user: user@user.com
-    pass: 123456
-4- si abren la consola cuando esta obteniendo datos se puede ver un log tiempo real (muy útil para debugear)
+1- clonar el repositorio  
+2- ejecutar flutter pub get  
+3- para el login:  
+    user: user@user.com  
+    pass: 123456  
+4- si abren la consola cuando esta obteniendo datos se puede ver un log tiempo real (muy útil para debugear)  
 
 ## Características de usabilidad
 - Pantalla de loguin (dummy)
