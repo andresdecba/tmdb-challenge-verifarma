@@ -1,11 +1,11 @@
 # Flutter Movies app (TMDB API)
-App creada para el challenge de Verifarma
-4 de julio de 2023
-Dev: Andrés Pugliese
-Mail: andrésdecba@gmail.com
-Cel: 351 6 639258
-Linked in: https://www.linkedin.com/in/andres-pugliese/
-Mi playstore: https://play.google.com/store/apps/details?id=site.thisweek 
+App creada para el challenge de Verifarma  
+4 de julio de 2023  
+Dev: Andrés Pugliese  
+Mail: andrésdecba@gmail.com  
+Cel: 351 6 639258  
+Linked in: https://www.linkedin.com/in/andres-pugliese  
+Mi playstore: https://play.google.com/store/apps/details?id=site.thisweek  
 
 ## Levantar app
 1- clonar el repositorio
