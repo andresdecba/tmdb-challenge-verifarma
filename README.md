@@ -48,7 +48,6 @@ Mi playstore: https://play.google.com/store/apps/details?id=site.thisweek
 - Segun el pdf del challenge Faltó incluir:
     - Buscar por categoría, actores, año de lanzamiento
     - accesibilidad para personas con discapacidades visuales
-
 - Por falta de tiempo no llegué a terminar con esas características, pero por como está armada la app, son falcilmente agregables.
 - Hice enfasis en la estética, la reusabilidad del código y en una arquitectura sólida y escalable.
 - Cualquier consulta quedo a dispocisión, espero les guste la app, gracias y saludos !
