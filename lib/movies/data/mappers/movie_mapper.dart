@@ -1,10 +1,14 @@
 import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
+import 'package:tmdb_challenge/movies/data/models/advanced_movies_search_model.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
 import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
+import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 
 class MovieMapper {
+  final StorageDatasource _storage = StorageDatasourceImpl();
+
   Movie movieMapper(TMDBMovieModel movieDB) {
     return Movie(
       id: movieDB.id,
@@ -45,7 +49,14 @@ class MovieMapper {
     );
   }
 
-  final StorageDatasource _storage = StorageDatasourceImpl();
+  AdvancedMoviesSearch advancedMoviesSearchMapper(AdvancedMoviesSearchModel value) {
+    return AdvancedMoviesSearch(
+      page: value.page,
+      results: value.results.isNotEmpty ? value.results.map((e) => movieMapper(e)).toList() : [],
+      totalPages: value.totalPages,
+      totalResults: value.totalResults,
+    );
+  }
 
   bool isFavorite(int movieId) {
     bool match = false;

@@ -1,0 +1,84 @@
+>>> DISCOVER <<<<
+docs: https://api.themoviedb.org/3/discover/movie
+
+## FECHAS:
+primary_release_date.gte: 2010-09-25 (date)
+primary_release_date.lte: 2015-12-31 (date)
+primary_release_year: 2015 (int)
+*primary: es la fecha más antigua de la película en la base de datos.
+Por ejemplo se lanzó primero en inglaterra.
+
+release_date.gte: 2010-01-01 (date)
+release_date.lte:  2015-12-31 (date)
+Year: 2016 (int)
+*Non-primary: son las fechas, cualquier fecha, lanzamiento en todos los países o idiomas. Es decir: 2015 en Inglaterra, 2016 en Francia y 2017 en Brasil.
+
+lte: Less than or equal
+gte: Greater than or equal
+lt: Less than
+gt: Greater than
+
+## PERSONAS:
+with_people: bucar con el id del actor/persona
+(string, can be a comma (AND) or pipe (OR) separated query)
+christian bale:  id= 3894
+Christopher Nolan: id= 525
+docs: https://developer.themoviedb.org/reference/changes-people-list
+
+##CATEGORIAS:
+with_genres: buscar con el id de la categoria
+(string, can be a comma (AND) or pipe (OR) separated query)
+action: 28
+adventure: 12
+docs: https://developer.themoviedb.org/reference/genre-movie-list
+
+##KEY WORDS
+with_keywords: buscar con palabaras claves
+(string, can be a comma (AND) or pipe (OR) separated query)
+
+ejemplo:
+producciones relacionadas a 'Cristopher Nolan' entre los años '2010' y '2015'
+https://api.themoviedb.org/3/discover/movie?api_key=c5113d97db256e4fe3b80577006c26df&language=es-Mx&primary_release_date.gte=2010-01-01&primary_release_date.lte=2015-12-31&with_people=525
+
+producciones relacionadas a 'Cristopher Nolan' y 'Christian Bale' entre los años '2010' y '2015' y categoria '80'
+https://api.themoviedb.org/3/discover/movie?api_key=c5113d97db256e4fe3b80577006c26df&language=es-Mx&primary_release_date.gte=2010-01-01&primary_release_date.lte=2015-12-31&with_people=525, 3894&genre_ids=80
+
+Queries:
+primary_release_date.gte: '2010-01-01' - string, formato fecha
+primary_release_date.lte: '2015-01-01' - string, formato fecha
+with_people: '525, 3894'               - string, separado con comas o ||
+year: 2016                             - int
+genre_ids: '80, 12'                    - string, sepadado con comas o ||
+with_keywords: 'dark knight, batman'   - string, sepadado con comas o ||
+
+
+
+{
+    "page": 1,
+    "results": [
+        {
+            "adult": false,
+            "backdrop_path": "/Yrpb32j3eMpMVX7ND3TnOkHnbl.jpg",
+            "genre_ids": [
+                28,
+                80,
+                18,
+                53
+            ],
+            "id": 49026,
+            "original_language": "en",
+            "original_title": "The Dark Knight Rises",
+            "overview": "Hace ocho años que Batman desapareció, dejando de ser un héroe para convertirse en un fugitivo. Al asumir la culpa por la muerte del fiscal del distrito Harvey Dent, el Caballero Oscuro decidió sacrificarlo todo por lo que consideraba, al igual que el Comisario Gordon, un bien mayor. La mentira funciona durante un tiempo, ya que la actividad criminal de la ciudad de Gotham se ve aplacada gracias a la dura Ley Dent. Pero todo cambia con la llegada de una astuta gata ladrona que pretende llevar a cabo un misterioso plan. Sin embargo, mucho más peligrosa es la aparición en escena de Bane, un terrorista enmascarado cuyos despiadados planes obligan a Bruce a regresar de su voluntario exilio.",
+            "popularity": 64.864,
+            "poster_path": "/rrS7K8tXVFUBliIKWaRuSq65nWr.jpg",
+            "release_date": "2012-07-16",
+            "title": "El caballero oscuro: La leyenda renace",
+            "video": false,
+            "vote_average": 7.8,
+            "vote_count": 20982
+        },
+        ...3 resultados mas.
+    ],
+    "total_pages": 1,
+    "total_results": 4
+}
