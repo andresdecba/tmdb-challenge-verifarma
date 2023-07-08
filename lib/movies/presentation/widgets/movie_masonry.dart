@@ -25,10 +25,8 @@ class _MoviesGridViewState extends State<MoviesGridView> {
   @override
   void initState() {
     super.initState();
-
     scrollController.addListener(() {
       if (widget.loadNextPage == null) return;
-
       if ((scrollController.position.pixels + 100) >= scrollController.position.maxScrollExtent) {
         widget.loadNextPage!();
       }

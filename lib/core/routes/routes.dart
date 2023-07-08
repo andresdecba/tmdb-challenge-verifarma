@@ -5,7 +5,7 @@ import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/favorites_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/search_page.dart';
+import 'package:tmdb_challenge/movies/presentation/pages/advanced_search_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/now_playing.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/popular.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/top_rated.dart';
@@ -56,7 +56,7 @@ class AppRoutes {
       GoRoute(
         path: '/searchPage',
         name: searchPage,
-        builder: (context, state) => const SearchPage(),
+        builder: (context, state) => const AdvancedSearchPage(),
       ),
 
       GoRoute(

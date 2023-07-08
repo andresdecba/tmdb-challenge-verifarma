@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:animate_do/animate_do.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MoviePoster extends StatelessWidget {
@@ -26,11 +27,11 @@ class MoviePoster extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: posterPath != null
-              ? FadeInImage(
+              ? CachedNetworkImage(
+                  imageUrl: posterPath!,
                   height: height ?? 180,
                   fit: BoxFit.cover,
-                  placeholder: const AssetImage('assets/bottle-loader.gif'),
-                  image: NetworkImage(posterPath!),
+                  placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
                 )
               : FadeInImage(
                   height: height ?? 180,
@@ -41,5 +42,29 @@ class MoviePoster extends StatelessWidget {
         ),
       ),
     );
+
+    // return FadeInUp(
+    //   from: random.nextInt(100) + 80,
+    //   delay: Duration(milliseconds: random.nextInt(450) + 0),
+    //   child: GestureDetector(
+    //     onTap: (onTap != null) ? () => onTap!() : null,
+    //     child: ClipRRect(
+    //       borderRadius: BorderRadius.circular(5),
+    //       child: posterPath != null
+    //           ? FadeInImage(
+    //               height: height ?? 180,
+    //               fit: BoxFit.cover,
+    //               placeholder: const AssetImage('assets/bottle-loader.gif'),
+    //               image: NetworkImage(posterPath!),
+    //             )
+    //           : FadeInImage(
+    //               height: height ?? 180,
+    //               fit: BoxFit.cover,
+    //               placeholder: const AssetImage('assets/bottle-loader.gif'),
+    //               image: const AssetImage('assets/no-image.png'),
+    //             ),
+    //     ),
+    //   ),
+    // );
   }
 }

@@ -23,7 +23,7 @@ with_people: bucar con el id del actor/persona
 (string, can be a comma (AND) or pipe (OR) separated query)
 christian bale:  id= 3894
 Christopher Nolan: id= 525
-docs: https://developer.themoviedb.org/reference/changes-people-list
+docs: https://developer.themoviedb.org/reference/search-person
 
 ##CATEGORIAS:
 with_genres: buscar con el id de la categoria

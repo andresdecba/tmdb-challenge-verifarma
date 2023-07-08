@@ -1,5 +1,7 @@
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 
 abstract class MoviesDatasource {
   Future<List<Movie>> getMovies({required int page, required String moviesList});
@@ -7,10 +9,12 @@ abstract class MoviesDatasource {
   Future<Movie> getMovie({required String movieId});
   Future<AdvancedMoviesSearch> advancedMoviesSearch({
     String? keyWord,
-    DateTime? fromYear,
-    DateTime? toYear,
     int? year,
+    String? toYear,
+    String? fromYear,
     String? people,
     String? category,
   });
+  Future<List<MovieCategory>> getCategories();
+  Future<List<PersonDetails>> getPersons({required String query, required int page});
 }

@@ -11,20 +11,20 @@ class AdvancedMoviesSearchUseCase {
   final MoviesRepository repository;
 
   Future<Either<Failure, AdvancedMoviesSearch>> call({
-    String? keyWord,
-    DateTime? fromYear,
-    DateTime? toYear,
-    int? year,
-    String? people,
-    String? category,
+    required String keyWord,
+    required String fromYear,
+    required String toYear,
+    required String year,
+    required String people,
+    required String category,
   }) {
     return repository.advancedMoviesSearch(
-      category: category,
-      fromYear: fromYear,
-      keyWord: keyWord,
-      people: people,
-      toYear: toYear,
-      year: year,
+      category: category != '' ? category : null,
+      fromYear: fromYear != '' ? fromYear : null,
+      keyWord: keyWord != '' ? keyWord : null,
+      people: people != '' ? people : null,
+      toYear: toYear != '' ? toYear : null,
+      year: year != '' ? int.parse(year) : null,
     );
   }
 }

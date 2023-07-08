@@ -4,6 +4,8 @@ import 'package:tmdb_challenge/core/network/failures.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/movies_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
+import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 import 'package:tmdb_challenge/movies/domain/repositories/movies_repositoriy.dart';
 
 class MovieRepositoryImpl extends MoviesRepository {
@@ -40,8 +42,8 @@ class MovieRepositoryImpl extends MoviesRepository {
   @override
   Future<Either<Failure, AdvancedMoviesSearch>> advancedMoviesSearch({
     String? keyWord,
-    DateTime? fromYear,
-    DateTime? toYear,
+    String? fromYear,
+    String? toYear,
     int? year,
     String? people,
     String? category,
@@ -55,6 +57,20 @@ class MovieRepositoryImpl extends MoviesRepository {
         toYear: toYear,
         year: year,
       ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MovieCategory>>> getCategories() {
+    return ApiNetwork.call(
+      () async => datasource.getCategories(),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<PersonDetails>>> getPersons({required String query, required int page}) {
+    return ApiNetwork.call(
+      () async => datasource.getPersons(query: query, page: page),
     );
   }
 }
