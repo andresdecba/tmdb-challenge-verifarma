@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
 
 class Helpers {
   // ej 45223 => 45 K
@@ -9,5 +10,15 @@ class Helpers {
       locale: 'en',
     ).format(number);
     return formattedNumber;
+  }
+
+  static String stringsListToString(List<String> value) {
+    //return value.map((e) => e).toList().toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '');
+    return value.join(',').replaceAll(', ', ',');
+  }
+
+  static String categoriesListToString(List<dynamic> value) {
+    var tmp = value.map((e) => e.id.toString()).toList();
+    return tmp.join(',').replaceAll(', ', ',');
   }
 }

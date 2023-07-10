@@ -1,18 +1,18 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
 
-class MovieTile extends StatelessWidget {
-  final Movie movie;
-  final VoidCallback onMovieSelected;
+class PersonTile extends StatelessWidget {
+  final PersonDetails person;
   final double? height;
+  final VoidCallback? onPersonSelected;
 
-  const MovieTile({
+  const PersonTile({
     super.key,
-    required this.movie,
-    required this.onMovieSelected,
+    required this.person,
     this.height,
+    this.onPersonSelected,
   });
 
   @override
@@ -20,9 +20,7 @@ class MovieTile extends StatelessWidget {
     final textStyles = Theme.of(context).textTheme;
 
     return InkWell(
-      onTap: () {
-        onMovieSelected();
-      },
+      onTap: (onPersonSelected != null) ? () => onPersonSelected!() : null,
       child: FadeIn(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -32,7 +30,7 @@ class MovieTile extends StatelessWidget {
             children: [
               // Image
               MoviePoster(
-                posterPath: movie.posterPath,
+                posterPath: person.profilePath,
                 height: height ?? 120,
               ),
 
@@ -44,14 +42,12 @@ class MovieTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.title,
+                      person.name,
                       style: textStyles.titleMedium,
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      movie.overview,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
+                      person.knownForDepartment,
                       style: textStyles.bodyMedium!.copyWith(color: Colors.grey),
                     ),
                   ],

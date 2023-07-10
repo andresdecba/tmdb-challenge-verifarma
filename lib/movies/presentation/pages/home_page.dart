@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/seach_movies_provider.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
 
 class HomePage extends ConsumerWidget {
@@ -26,6 +26,7 @@ class HomePage extends ConsumerWidget {
           height: 15,
         ),
         actions: [
+          // search a movie
           IconButton(
             onPressed: () {
               // SEARCH MOVIES //
@@ -40,6 +41,12 @@ class HomePage extends ConsumerWidget {
             },
             icon: const Icon(Icons.search),
           ),
+          // filtered search
+          IconButton(
+            onPressed: () => context.goNamed(AppRoutes.filterSearchPage),
+            icon: const Icon(Icons.filter_list),
+          ),
+          // favorites
           IconButton(
             onPressed: () {
               ref.read(favoriteProviderAsync.notifier).getFavorites();
