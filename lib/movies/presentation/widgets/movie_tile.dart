@@ -6,11 +6,13 @@ import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
 class MovieTile extends StatelessWidget {
   final Movie movie;
   final VoidCallback onMovieSelected;
+  final double? height;
 
   const MovieTile({
     super.key,
     required this.movie,
     required this.onMovieSelected,
+    this.height,
   });
 
   @override
@@ -31,7 +33,7 @@ class MovieTile extends StatelessWidget {
               // Image
               MoviePoster(
                 posterPath: movie.posterPath,
-                height: 120,
+                height: height ?? 120,
               ),
 
               const SizedBox(width: 10),

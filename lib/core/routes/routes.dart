@@ -20,7 +20,7 @@ class AppRoutes {
   static const homePage = 'homePage';
   static const movieDetailsPage = 'movieDetailsPage';
   static const favoritesPage = 'favoritesPage';
-  static const searchPage = 'searchPage';
+  static const filterSearchPage = 'filterSearchPage';
 
   // Tabs
   static const nowPlayingTab = 'nowPlaying';
@@ -29,7 +29,7 @@ class AppRoutes {
   static const upcomingTab = 'upcomingTab';
 
   static final appRoutes = GoRouter(
-    initialLocation: '/searchPage', //'/nowPlaying', //'/loginPage',
+    initialLocation: '/nowPlaying', //'/loginPage',
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
@@ -54,8 +54,8 @@ class AppRoutes {
       ),
 
       GoRoute(
-        path: '/searchPage',
-        name: searchPage,
+        path: '/filterSearchPage',
+        name: filterSearchPage,
         builder: (context, state) => const AdvancedSearchPage(),
       ),
 

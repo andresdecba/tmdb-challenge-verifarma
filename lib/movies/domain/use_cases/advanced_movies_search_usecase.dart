@@ -15,14 +15,14 @@ class AdvancedMoviesSearchUseCase {
     required String fromYear,
     required String toYear,
     required String year,
-    required String people,
-    required String category,
+    required String persons,
+    required String categories,
   }) {
     return repository.advancedMoviesSearch(
-      category: category != '' ? category : null,
+      categories: categories != '' ? categories : null,
       fromYear: fromYear != '' ? fromYear : null,
       keyWord: keyWord != '' ? keyWord : null,
-      people: people != '' ? people : null,
+      persons: persons != '' ? persons : null,
       toYear: toYear != '' ? toYear : null,
       year: year != '' ? int.parse(year) : null,
     );

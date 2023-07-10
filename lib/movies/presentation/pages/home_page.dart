@@ -26,9 +26,9 @@ class HomePage extends ConsumerWidget {
           height: 15,
         ),
         actions: [
+          // search a movie
           IconButton(
             onPressed: () {
-              context.push(AppRoutes.searchPage);
               // SEARCH MOVIES //
               final searchMovies = ref.read(searchMoviesProvider);
               showSearch(
@@ -41,6 +41,12 @@ class HomePage extends ConsumerWidget {
             },
             icon: const Icon(Icons.search),
           ),
+          // filtered search
+          IconButton(
+            onPressed: () => context.goNamed(AppRoutes.filterSearchPage),
+            icon: const Icon(Icons.filter_list),
+          ),
+          // favorites
           IconButton(
             onPressed: () {
               ref.read(favoriteProviderAsync.notifier).getFavorites();

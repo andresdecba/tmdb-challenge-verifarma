@@ -1,4 +1,5 @@
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
+import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
@@ -12,9 +13,10 @@ abstract class MoviesDatasource {
     int? year,
     String? toYear,
     String? fromYear,
-    String? people,
-    String? category,
+    String? persons,
+    String? categories,
   });
   Future<List<MovieCategory>> getCategories();
   Future<List<PersonDetails>> getPersons({required String query, required int page});
+  Future<List<Keyword>> getKeywords({required String query, required int page});
 }

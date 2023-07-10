@@ -33,15 +33,14 @@ adventure: 12
 docs: https://developer.themoviedb.org/reference/genre-movie-list
 
 ##KEY WORDS
-with_keywords: buscar con palabaras claves
+with_keywords: buscar con id de palabra clave
 (string, can be a comma (AND) or pipe (OR) separated query)
+docs: https://developer.themoviedb.org/reference/search-keyword
 
 ejemplo:
-producciones relacionadas a 'Cristopher Nolan' entre los años '2010' y '2015'
-https://api.themoviedb.org/3/discover/movie?api_key=c5113d97db256e4fe3b80577006c26df&language=es-Mx&primary_release_date.gte=2010-01-01&primary_release_date.lte=2015-12-31&with_people=525
 
 producciones relacionadas a 'Cristopher Nolan' y 'Christian Bale' entre los años '2010' y '2015' y categoria '80'
-https://api.themoviedb.org/3/discover/movie?api_key=c5113d97db256e4fe3b80577006c26df&language=es-Mx&primary_release_date.gte=2010-01-01&primary_release_date.lte=2015-12-31&with_people=525, 3894&genre_ids=80
+https://api.themoviedb.org/3/discover/movie?api_key=c5113d97db256e4fe3b80577006c26df&language=es-Mx&primary_release_date.gte=2010-01-01&primary_release_date.lte=2015-12-31&with_people=525,3894&genre_ids=80
 
 Queries:
 primary_release_date.gte: '2010-01-01' - string, formato fecha
@@ -49,7 +48,7 @@ primary_release_date.lte: '2015-01-01' - string, formato fecha
 with_people: '525, 3894'               - string, separado con comas o ||
 year: 2016                             - int
 genre_ids: '80, 12'                    - string, sepadado con comas o ||
-with_keywords: 'dark knight, batman'   - string, sepadado con comas o ||
+with_keywords: ''                      - string, sepadado con comas o ||
 
 
 

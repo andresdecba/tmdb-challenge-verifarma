@@ -1,11 +1,13 @@
 import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/data/models/advanced_movies_search_model.dart';
+import 'package:tmdb_challenge/movies/data/models/keyword_model.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_category_model.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
 import 'package:tmdb_challenge/movies/data/models/person_details_model.dart';
 import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
+import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
@@ -75,6 +77,13 @@ class MovieMapper {
       knownForDepartment: value.knownForDepartment ?? '',
       name: value.name ?? '',
       profilePath: (value.profilePath != null) ? 'https://image.tmdb.org/t/p/w500${value.profilePath}' : null,
+    );
+  }
+
+  Keyword keywordMapper(KeywordModel value) {
+    return Keyword(
+      id: value.id,
+      name: value.name ?? '',
     );
   }
 

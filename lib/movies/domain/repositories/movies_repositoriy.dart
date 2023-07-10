@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:tmdb_challenge/core/network/failures.dart';
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
+import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
@@ -14,9 +15,10 @@ abstract class MoviesRepository {
     String? fromYear,
     String? toYear,
     int? year,
-    String? people,
-    String? category,
+    String? persons,
+    String? categories,
   });
   Future<Either<Failure, List<MovieCategory>>> getCategories();
   Future<Either<Failure, List<PersonDetails>>> getPersons({required String query, required int page});
+  Future<Either<Failure, List<Keyword>>> getKeywords({required String query, required int page});
 }
