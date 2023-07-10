@@ -29,7 +29,7 @@ class AppRoutes {
   static const upcomingTab = 'upcomingTab';
 
   static final appRoutes = GoRouter(
-    initialLocation: '/nowPlaying', //'/loginPage',
+    initialLocation: '/loginPage', // '/nowPlaying',
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
