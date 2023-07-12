@@ -21,4 +21,5 @@ abstract class MoviesRepository {
   Future<Either<Failure, List<MovieCategory>>> getCategories();
   Future<Either<Failure, List<PersonDetails>>> getPersons({required String query, required int page});
   Future<Either<Failure, List<Keyword>>> getKeywords({required String query, required int page});
+  Future<Either<Failure, List<Movie>>> getTrendingMovies({required int page});
 }

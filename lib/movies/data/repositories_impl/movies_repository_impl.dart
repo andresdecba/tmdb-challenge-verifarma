@@ -81,4 +81,11 @@ class MovieRepositoryImpl extends MoviesRepository {
       () async => datasource.getKeywords(query: query, page: page),
     );
   }
+
+  @override
+  Future<Either<Failure, List<Movie>>> getTrendingMovies({required int page}) {
+    return ApiNetwork.call(
+      () async => datasource.getTrendingMovies(page: page),
+    );
+  }
 }

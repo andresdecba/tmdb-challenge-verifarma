@@ -7,12 +7,16 @@ class MoviePoster extends StatelessWidget {
   final double? height;
   final String? posterPath;
   final VoidCallback? onTap;
+  final bool? visibleWidget;
+  final Widget? widget;
 
   const MoviePoster({
     super.key,
     this.height,
     required this.posterPath,
     this.onTap,
+    this.visibleWidget,
+    this.widget,
   });
 
   @override
@@ -31,10 +35,30 @@ class MoviePoster extends StatelessWidget {
                   height: height ?? 180,
                   child: AspectRatio(
                     aspectRatio: 2 / 3,
-                    child: CachedNetworkImage(
-                      imageUrl: posterPath!,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
+                    child: Stack(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: posterPath!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
+                        ),
+                        Visibility(
+                          visible: visibleWidget ?? false,
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: widget,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 )

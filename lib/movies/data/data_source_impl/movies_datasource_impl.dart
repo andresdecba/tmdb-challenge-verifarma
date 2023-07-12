@@ -202,4 +202,30 @@ class MoviesDatasourceImpl extends MoviesDatasource {
       throw ExceptionUtils.getExceptionFromStatusCode(error);
     }
   }
+
+  @override
+  Future<List<Movie>> getTrendingMovies({required int page}) async {
+    final dio = await DioClient.callDio();
+
+    try {
+      final dioResponse = await dio.get(
+        '/trending/movie/day',
+        queryParameters: {
+          'page': page,
+        },
+      );
+
+      final result = List<Movie>.from(
+        dioResponse.data["results"].map(
+          (e) => mapper.movieMapper(
+            TMDBMovieModel.fromJson(e),
+          ),
+        ),
+      );
+
+      return result;
+    } on DioException catch (error) {
+      throw ExceptionUtils.getExceptionFromStatusCode(error);
+    }
+  }
 }

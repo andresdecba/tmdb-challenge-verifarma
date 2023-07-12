@@ -4,6 +4,7 @@ import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_im
 import 'package:tmdb_challenge/movies/data/repositories_impl/movies_repository_impl.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/use_cases/get_movies_list_usecase.dart';
+import 'package:tmdb_challenge/movies/domain/use_cases/get_trending_movies.dart';
 
 // NOW PLAYING //
 final nowPlayingAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
@@ -41,6 +42,14 @@ final upcomingAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncV
   return GetMoviesListAsyncController(useCase: useCase);
 });
 
+// TRENDING //
+final trendingAsync = StateNotifierProvider<GetMoviesListAsyncController, AsyncValue<List<Movie>>>((ref) {
+  final useCase = GetTrendingMoviesUseCase(
+    MovieRepositoryImpl(MoviesDatasourceImpl()),
+  );
+  return GetMoviesListAsyncController(useCase: useCase);
+});
+
 class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>> {
   GetMoviesListAsyncController({
     required this.useCase,
@@ -48,7 +57,7 @@ class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>
     [];
   }
 
-  GetMoviesListUseCase useCase;
+  dynamic useCase;
   int currentPage = 0;
   Timer? _debounceTimer;
 

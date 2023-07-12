@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,11 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
-import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/new_bottom_navigation.dart';
 
 class NewHome extends ConsumerStatefulWidget {
   const NewHome({super.key});
@@ -26,32 +27,34 @@ class _NewHomeState extends ConsumerState<NewHome> {
     ref.read(popularAsync.notifier).nextPage();
     ref.read(topRatedAsync.notifier).nextPage();
     ref.read(upcomingAsync.notifier).nextPage();
+    ref.read(trendingAsync.notifier).nextPage();
   }
 
   @override
   Widget build(BuildContext context) {
+    //final textStyles = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.6),
-        title: SvgPicture.asset(
-          'assets/tmdb_logo.svg',
-          height: 15,
-        ),
-        titleSpacing: 20,
-        centerTitle: true,
-      ),
-      //extendBodyBehindAppBar: true,
-      bottomNavigationBar: const MyBottomNavigation(),
+      appBar: appbar,
+      extendBodyBehindAppBar: true,
+      bottomNavigationBar: const NewBottomNavigation(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            _SearchBar(ref: ref),
-            const SizedBox(height: 20),
+            // SEARCH BAR
+            SafeArea(
+              child: _SearchBar(ref: ref),
+            ),
+            const SizedBox(height: 10),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
+                  // SLIDER
+                  _CarouselSlider(),
+                  const SizedBox(height: 20),
+
                   // NOW PLAYING
                   _MoviesHorizontalList(
                     list: ref.watch(nowPlayingAsync),
@@ -82,6 +85,106 @@ class _NewHomeState extends ConsumerState<NewHome> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  var appbar = AppBar(
+    backgroundColor: Colors.black.withOpacity(0.5),
+    title: SvgPicture.asset(
+      'assets/tmdb_logo.svg',
+      height: 15,
+    ),
+    centerTitle: true,
+  );
+}
+
+class _CarouselSlider extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ref) {
+    final moviesList = ref.watch(trendingAsync);
+    double height = MediaQuery.of(context).size.height * 0.35;
+    final textStyles = Theme.of(context).textTheme;
+
+    return moviesList.when(
+      data: (data) {
+        var items = data.map((e) {
+          var idx = data.indexOf(e) + 1;
+          return MoviePoster(
+            posterPath: e.posterPath,
+            visibleWidget: true,
+            widget: Text.rich(
+              textAlign: TextAlign.center,
+              TextSpan(
+                text: 'TOP\n',
+                children: [
+                  TextSpan(
+                    text: idx.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList();
+
+        return Column(
+          children: [
+            // title
+            Text(
+              'Top tendencias hoy',
+              style: textStyles.headlineSmall!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white.withOpacity(0.75),
+              ),
+            ),
+            const SizedBox(height: 15),
+            // bottom gradient //
+            DecoratedBox(
+              position: DecorationPosition.background,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0.0, 0.3],
+                  colors: [
+                    Colors.black,
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+              child: CarouselSlider(
+                items: items,
+                options: CarouselOptions(
+                  height: height,
+                  aspectRatio: 2 / 3,
+                  viewportFraction: 0.55,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  enlargeFactor: 0.2,
+                  onPageChanged: (index, reason) {},
+                  scrollDirection: Axis.horizontal,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      error: (error, stackTrace) => Text('error $error'),
+      loading: () => SizedBox(
+        height: height,
+        child: const Center(
+          child: CircularProgressIndicator(),
         ),
       ),
     );
@@ -125,8 +228,11 @@ class _MoviesHorizontalList extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) => Text(error.toString()),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
+      loading: () => const SizedBox(
+        height: 180,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }
@@ -142,11 +248,8 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.6),
-      ),
       child: Center(
         child: Row(
           children: [
@@ -165,7 +268,7 @@ class _SearchBar extends StatelessWidget {
                 },
                 child: Container(
                   height: 35,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                   alignment: Alignment.centerLeft,
                   decoration: BoxDecoration(
                     //border: Border.all(color: Colors.grey),
@@ -179,14 +282,6 @@ class _SearchBar extends StatelessWidget {
             IconButton(
               onPressed: () => context.goNamed(AppRoutes.filterSearchPage),
               icon: const Icon(Icons.filter_list),
-              visualDensity: VisualDensity.compact,
-            ),
-            IconButton(
-              onPressed: () {
-                ref.read(favoriteProviderAsync.notifier).getFavorites();
-                context.goNamed(AppRoutes.favoritesPage);
-              },
-              icon: const Icon(Icons.favorite),
               visualDensity: VisualDensity.compact,
             ),
           ],

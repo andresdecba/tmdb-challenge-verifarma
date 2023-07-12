@@ -19,4 +19,5 @@ abstract class MoviesDatasource {
   Future<List<MovieCategory>> getCategories();
   Future<List<PersonDetails>> getPersons({required String query, required int page});
   Future<List<Keyword>> getKeywords({required String query, required int page});
+  Future<List<Movie>> getTrendingMovies({required int page});
 }
