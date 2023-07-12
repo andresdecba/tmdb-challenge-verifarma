@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.dart';
@@ -34,7 +34,7 @@ class _NewHomeState extends ConsumerState<NewHome> {
   Widget build(BuildContext context) {
     //final textStyles = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: appbar,
+      appBar: customAppbar,
       extendBodyBehindAppBar: true,
       bottomNavigationBar: const NewBottomNavigation(),
       body: SingleChildScrollView(
@@ -60,26 +60,43 @@ class _NewHomeState extends ConsumerState<NewHome> {
                     list: ref.watch(nowPlayingAsync),
                     nextPage: () => ref.read(nowPlayingAsync.notifier).nextPage(),
                     title: 'En cartelera',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesList,
+                      extra: {"list": ref.read(nowPlayingAsync), "title": 'En cartelera'},
+                    ),
                   ),
+
                   // POPULAR
                   _MoviesHorizontalList(
                     list: ref.watch(popularAsync),
                     nextPage: () => ref.read(popularAsync.notifier).nextPage(),
                     title: 'Más populares',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesList,
+                      extra: {"list": ref.read(popularAsync), "title": 'Más populares'},
+                    ),
                   ),
-                  // TOP RATED
 
+                  // TOP RATED
                   _MoviesHorizontalList(
                     list: ref.watch(topRatedAsync),
                     nextPage: () => ref.read(topRatedAsync.notifier).nextPage(),
                     title: 'Mejores ranqueadas',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesList,
+                      extra: {"list": ref.read(topRatedAsync), "title": 'Mejores ranqueadas'},
+                    ),
                   ),
-                  // UPCOMING
 
+                  // UPCOMING
                   _MoviesHorizontalList(
                     list: ref.watch(upcomingAsync),
                     nextPage: () => ref.read(upcomingAsync.notifier).nextPage(),
                     title: 'Próximos estrenos',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesList,
+                      extra: {"list": ref.read(upcomingAsync), "title": 'Próximos estrenos'},
+                    ),
                   ),
                 ],
               ),
@@ -89,15 +106,6 @@ class _NewHomeState extends ConsumerState<NewHome> {
       ),
     );
   }
-
-  var appbar = AppBar(
-    backgroundColor: Colors.black.withOpacity(0.5),
-    title: SvgPicture.asset(
-      'assets/tmdb_logo.svg',
-      height: 15,
-    ),
-    centerTitle: true,
-  );
 }
 
 class _CarouselSlider extends ConsumerWidget {
@@ -114,6 +122,10 @@ class _CarouselSlider extends ConsumerWidget {
           return MoviePoster(
             posterPath: e.posterPath,
             visibleWidget: true,
+            onTap: () => context.pushNamed(
+              AppRoutes.movieDetailsPage,
+              extra: e,
+            ),
             widget: Text.rich(
               textAlign: TextAlign.center,
               TextSpan(
@@ -196,11 +208,13 @@ class _MoviesHorizontalList extends ConsumerWidget {
     required this.list,
     required this.nextPage,
     required this.title,
+    required this.navigate,
   });
 
   final AsyncValue<List<Movie>> list;
   final VoidCallback nextPage;
   final String title;
+  final VoidCallback navigate;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -212,9 +226,21 @@ class _MoviesHorizontalList extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: textStyles.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: textStyles.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () => navigate(),
+                  icon: const Icon(
+                    Icons.arrow_forward_rounded,
+                    color: Colors.grey,
+                  ),
+                )
+              ],
             ),
             const SizedBox(height: 10),
             HorizontalListView(
@@ -273,14 +299,14 @@ class _SearchBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     //border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(50),
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withOpacity(0.20),
                   ),
                   child: const Icon(Icons.search),
                 ),
               ),
             ),
             IconButton(
-              onPressed: () => context.goNamed(AppRoutes.filterSearchPage),
+              onPressed: () => context.pushNamed(AppRoutes.filterSearchPage),
               icon: const Icon(Icons.filter_list),
               visualDensity: VisualDensity.compact,
             ),

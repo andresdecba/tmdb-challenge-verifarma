@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
   void _tryLogin() {
     if (formStateKey.currentState!.validate()) {
       if (emailCtrlr.text == _loginEmail && passwordCtrlr.text == _loginPassWord) {
-        context.goNamed(AppRoutes.homePage);
+        context.goNamed(AppRoutes.newHome);
       } else {
         loginErrorDialog(context);
       }

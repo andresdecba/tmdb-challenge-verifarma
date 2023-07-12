@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 
 class NewBottomNavigation extends ConsumerWidget {
   const NewBottomNavigation({super.key});
@@ -45,7 +46,8 @@ class NewBottomNavigation extends ConsumerWidget {
         context.goNamed(AppRoutes.newHome);
         break;
       case 1:
-        context.goNamed(AppRoutes.favoritesPage);
+        context.pushNamed(AppRoutes.favoritesPage);
+        ref.read(favoriteProviderAsync.notifier).getFavorites();
         break;
     }
   }

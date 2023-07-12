@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/login/presentation/pages/login_page.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/favorites_page.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/advanced_search_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/new_home_page.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/tabs/now_playing.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/tabs/popular.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/tabs/top_rated.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/tabs/upcoming.dart';
+import 'package:tmdb_challenge/movies/presentation/pages/movies_list.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
@@ -18,17 +15,11 @@ final shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
 class AppRoutes {
   // Pages
   static const loginPage = 'loginPage';
-  static const homePage = 'homePage';
   static const movieDetailsPage = 'movieDetailsPage';
   static const favoritesPage = 'favoritesPage';
   static const filterSearchPage = 'filterSearchPage';
   static const newHome = 'newHome';
-
-  // Tabs
-  static const nowPlayingTab = 'nowPlaying';
-  static const popularTab = 'popularTab';
-  static const topRatedTab = 'topRatedTab';
-  static const upcomingTab = 'upcomingTab';
+  static const moviesList = 'moviesList';
 
   static final appRoutes = GoRouter(
     initialLocation: '/newHome', //'/loginPage', // '/nowPlaying',
@@ -40,33 +31,21 @@ class AppRoutes {
         name: loginPage,
         builder: (context, state) => const LoginPage(),
       ),
-
       GoRoute(
         path: '/favoritesPage',
         name: favoritesPage,
         builder: (context, state) => const FavoritesPage(),
       ),
-
-      GoRoute(
-        path: '/homePage',
-        name: homePage,
-        builder: (context, state) => const HomePage(
-          child: NowPlayingTab(),
-        ),
-      ),
-
       GoRoute(
         path: '/newHome',
         name: newHome,
         builder: (context, state) => const NewHome(),
       ),
-
       GoRoute(
         path: '/filterSearchPage',
         name: filterSearchPage,
         builder: (context, state) => const AdvancedSearchPage(),
       ),
-
       GoRoute(
         path: '/movieDetailsPage',
         name: movieDetailsPage,
@@ -77,33 +56,16 @@ class AppRoutes {
         },
       ),
 
-      // bottom navigation bar tabs
-      ShellRoute(
-        navigatorKey: shellNavigatorKey,
-        builder: (context, state, child) => HomePage(child: child),
-        routes: [
-          GoRoute(
-              path: '/nowPlaying',
-              name: nowPlayingTab,
-              builder: (context, state) {
-                return const NowPlayingTab();
-              }),
-          GoRoute(
-            path: '/popularTab',
-            name: popularTab,
-            builder: (context, state) => const PopularTab(),
-          ),
-          GoRoute(
-            path: '/topRatedTab',
-            name: topRatedTab,
-            builder: (context, state) => const TopRatedTab(),
-          ),
-          GoRoute(
-            path: '/upcomingTab',
-            name: upcomingTab,
-            builder: (context, state) => const UpcomingTab(),
-          ),
-        ],
+      GoRoute(
+        path: '/moviesList',
+        name: moviesList,
+        builder: (context, state) {
+          Map<String, dynamic> args = state.extra as Map<String, dynamic>;
+          return MoviesList(
+            title: args['title'],
+            value: args['list'] as AsyncValue<List<Movie>>, // state.extra as AsyncValue<List<Movie>>,
+          );
+        },
       ),
     ],
   );

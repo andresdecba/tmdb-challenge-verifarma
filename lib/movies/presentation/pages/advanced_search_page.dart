@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/helpers/helpers.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/advanced-search/advanced_seach.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/advanced-search/get_categories.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/advanced-search/get_keywords.dart';
@@ -60,22 +61,7 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
     //final textStyle = Theme.of(context).textTheme;
 
     return Scaffold(
-      // APPBAR //
-      appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.6),
-        title: SvgPicture.asset(
-          'assets/tmdb_logo.svg',
-          height: 15,
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            context.goNamed(AppRoutes.homePage);
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-      ),
-
+      appBar: customAppbar,
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
