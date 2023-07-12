@@ -19,52 +19,38 @@ class MoviePoster extends StatelessWidget {
   Widget build(BuildContext context) {
     final random = Random();
 
-    return FadeInUp(
-      from: random.nextInt(100) + 80,
+    return FadeIn(
+      //from: random.nextInt(100) + 80,
       delay: Duration(milliseconds: random.nextInt(450) + 0),
       child: GestureDetector(
         onTap: (onTap != null) ? () => onTap!() : null,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: posterPath != null
-              ? CachedNetworkImage(
-                  imageUrl: posterPath!,
+              ? SizedBox(
                   height: height ?? 180,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
+                  child: AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: CachedNetworkImage(
+                      imageUrl: posterPath!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
+                    ),
+                  ),
                 )
-              : FadeInImage(
+              : SizedBox(
                   height: height ?? 180,
-                  fit: BoxFit.cover,
-                  placeholder: const AssetImage('assets/bottle-loader.gif'),
-                  image: const AssetImage('assets/no-image.png'),
+                  child: const AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: FadeInImage(
+                      fit: BoxFit.cover,
+                      placeholder: AssetImage('assets/bottle-loader.gif'),
+                      image: AssetImage('assets/no-image.png'),
+                    ),
+                  ),
                 ),
         ),
       ),
     );
-
-    // return FadeInUp(
-    //   from: random.nextInt(100) + 80,
-    //   delay: Duration(milliseconds: random.nextInt(450) + 0),
-    //   child: GestureDetector(
-    //     onTap: (onTap != null) ? () => onTap!() : null,
-    //     child: ClipRRect(
-    //       borderRadius: BorderRadius.circular(5),
-    //       child: posterPath != null
-    //           ? FadeInImage(
-    //               height: height ?? 180,
-    //               fit: BoxFit.cover,
-    //               placeholder: const AssetImage('assets/bottle-loader.gif'),
-    //               image: NetworkImage(posterPath!),
-    //             )
-    //           : FadeInImage(
-    //               height: height ?? 180,
-    //               fit: BoxFit.cover,
-    //               placeholder: const AssetImage('assets/bottle-loader.gif'),
-    //               image: const AssetImage('assets/no-image.png'),
-    //             ),
-    //     ),
-    //   ),
-    // );
   }
 }

@@ -6,6 +6,7 @@ import 'package:tmdb_challenge/movies/presentation/pages/favorites_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/advanced_search_page.dart';
+import 'package:tmdb_challenge/movies/presentation/pages/new_home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/now_playing.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/popular.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/tabs/top_rated.dart';
@@ -21,6 +22,7 @@ class AppRoutes {
   static const movieDetailsPage = 'movieDetailsPage';
   static const favoritesPage = 'favoritesPage';
   static const filterSearchPage = 'filterSearchPage';
+  static const newHome = 'newHome';
 
   // Tabs
   static const nowPlayingTab = 'nowPlaying';
@@ -29,7 +31,7 @@ class AppRoutes {
   static const upcomingTab = 'upcomingTab';
 
   static final appRoutes = GoRouter(
-    initialLocation: '/loginPage', // '/nowPlaying',
+    initialLocation: '/newHome', //'/loginPage', // '/nowPlaying',
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
@@ -51,6 +53,12 @@ class AppRoutes {
         builder: (context, state) => const HomePage(
           child: NowPlayingTab(),
         ),
+      ),
+
+      GoRoute(
+        path: '/newHome',
+        name: newHome,
+        builder: (context, state) => const NewHome(),
       ),
 
       GoRoute(
