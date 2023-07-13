@@ -21,4 +21,18 @@ class Helpers {
     var tmp = value.map((e) => e.id.toString()).toList();
     return tmp.join(',').replaceAll(', ', ',');
   }
+
+  static String categoriesToString({required List<MovieCategory> categories, required List<int> movieCategs}) {
+    List<String> lista = [];
+
+    for (var category in categories) {
+      for (var mc in movieCategs) {
+        if (category.id == mc) {
+          lista.add(category.name);
+        }
+      }
+    }
+
+    return lista.join(' ・ ');
+  }
 }

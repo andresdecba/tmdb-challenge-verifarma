@@ -1,14 +1,174 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:tmdb_challenge/core/helpers/helpers.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/advanced-search/get_categories.dart';
 
 class MovieDetailsPage extends ConsumerStatefulWidget {
-  const MovieDetailsPage({
+  const MovieDetailsPage({required this.movie, super.key});
+
+  final Movie movie;
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _MovieDetailsPageState();
+}
+
+class _MovieDetailsPageState extends ConsumerState<MovieDetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: true,
+      //   //backgroundColor: Colors.black.withOpacity(0.5),
+      // ),
+      //extendBody: true,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            _Image(movie: widget.movie),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Resumen',
+                    style: textStyles.titleLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.movie.overview,
+                    style: textStyles.bodyMedium!.copyWith(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Casting',
+                    style: textStyles.titleLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.movie.overview,
+                    style: textStyles.bodyMedium!.copyWith(color: Colors.grey),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Image extends ConsumerWidget {
+  const _Image({
+    required this.movie,
+  });
+  final Movie movie;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyles = Theme.of(context).textTheme;
+    final categs = ref.watch(getCategoriesProvider);
+    return movie.posterPath != null
+        ? SizedBox(
+            width: double.infinity,
+            child: AspectRatio(
+              aspectRatio: 2 / 3,
+              child: Stack(
+                children: [
+                  DecoratedBox(
+                    position: DecorationPosition.foreground,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        stops: [0, 1],
+                        tileMode: TileMode.clamp,
+                        colors: [Colors.black, Colors.transparent],
+                      ),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: movie.posterPath!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Image.asset('assets/bottle-loader.gif'),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // TITLE
+                          Text(
+                            movie.title,
+                            style: textStyles.headlineSmall!.copyWith(fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 10),
+                          // CATEGORIES
+                          categs.when(
+                            data: (data) {
+                              var values = Helpers.categoriesToString(
+                                categories: data,
+                                movieCategs: movie.genreIds,
+                              );
+
+                              return Text(
+                                values,
+                                style: textStyles.bodySmall,
+                                textAlign: TextAlign.center,
+                              );
+                            },
+                            error: (error, stackTrace) => const Text('error'),
+                            loading: () => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          // RATE
+                          RatingBar.readOnly(
+                            size: 25,
+                            alignment: Alignment.center,
+                            filledIcon: Icons.star,
+                            emptyIcon: Icons.star_border,
+                            isHalfAllowed: true,
+                            halfFilledIcon: Icons.star_half,
+                            initialRating: (movie.voteAverage / 2),
+                            maxRating: 5,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : const SizedBox(
+            width: double.infinity,
+            child: AspectRatio(
+              aspectRatio: 2 / 3,
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                placeholder: AssetImage('assets/bottle-loader.gif'),
+                image: AssetImage('assets/no-image.png'),
+              ),
+            ),
+          );
+  }
+}
+
+class MovieDetailsPageA extends ConsumerStatefulWidget {
+  const MovieDetailsPageA({
     super.key,
     required this.movie,
   });
@@ -18,7 +178,7 @@ class MovieDetailsPage extends ConsumerStatefulWidget {
   MovieScreenState createState() => MovieScreenState();
 }
 
-class MovieScreenState extends ConsumerState<MovieDetailsPage> {
+class MovieScreenState extends ConsumerState<MovieDetailsPageA> {
   @override
   void initState() {
     super.initState();
@@ -109,56 +269,6 @@ class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
     _isFav = widget.movie.isFavorite;
   }
 
-  void _addRemoveFav() {
-    final storage = ref.read(storageProvider);
-    final favs = ref.read(favoriteProviderAsync.notifier);
-
-    // 0- actualizar el estado de las pantallas
-    Movie? a;
-    if (ref.watch(nowPlayingAsync).value != null) {
-      a = ref.watch(nowPlayingAsync).value!.firstWhereOrNull((element) => element.id == widget.movie.id);
-    }
-    Movie? b;
-    if (ref.watch(popularAsync).value != null) {
-      b = ref.watch(popularAsync).value!.firstWhereOrNull((element) => element.id == widget.movie.id);
-    }
-    Movie? c;
-    if (ref.watch(topRatedAsync).value != null) {
-      c = ref.watch(topRatedAsync).value!.firstWhereOrNull((element) => element.id == widget.movie.id);
-    }
-    Movie? d;
-    if (ref.watch(upcomingAsync).value != null) {
-      d = ref.watch(upcomingAsync).value!.firstWhereOrNull((element) => element.id == widget.movie.id);
-    }
-
-    // 1- setear estado
-    setState(() {
-      _isFav = !_isFav;
-    });
-
-    // 2- cambió a true, agregar
-    if (_isFav == true) {
-      storage.saveFavorite(widget.movie.id.toString());
-      widget.movie.isFavorite = true;
-      if (a != null) a.isFavorite = true;
-      if (b != null) b.isFavorite = true;
-      if (c != null) c.isFavorite = true;
-      if (d != null) d.isFavorite = true;
-      favs.add(widget.movie);
-    }
-
-    // 3- cambió a false, quitar
-    if (_isFav == false) {
-      storage.removeFavorite(widget.movie.id.toString());
-      widget.movie.isFavorite = false;
-      if (a != null) a.isFavorite = false;
-      if (b != null) b.isFavorite = false;
-      if (c != null) c.isFavorite = false;
-      if (d != null) d.isFavorite = false;
-      favs.remove(widget.movie);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -225,7 +335,7 @@ class _CustomSliverAppBarState extends ConsumerState<_CustomSliverAppBar> {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   padding: const EdgeInsets.all(20),
-                  onPressed: () => _addRemoveFav(),
+                  onPressed: () {}, //() => _addRemoveFav(),
                   icon: _isFav
                       ? const Icon(
                           Icons.favorite_rounded,
