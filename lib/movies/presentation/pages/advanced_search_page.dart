@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/helpers/helpers.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
@@ -58,10 +57,37 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
   Widget build(BuildContext context) {
     var controller = ref.read(advancedSearchAsyncProvider.notifier);
     var provider = ref.watch(advancedSearchAsyncProvider);
-    //final textStyle = Theme.of(context).textTheme;
+    final titleStyle = Theme.of(context).textTheme.titleMedium;
+    final emptyStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
+          color: Colors.grey.shade700,
+          fontStyle: FontStyle.italic,
+        );
 
     return Scaffold(
       appBar: customAppbar,
+      persistentFooterButtons: [
+        // BOTON BUSCAR //
+        SizedBox(
+          width: double.infinity,
+          height: 40,
+          child: Expanded(
+            child: ElevatedButton(
+              onPressed: () {
+                controller.getData(
+                  keyword: Helpers.categoriesListToString(ref.read(selectedKewordsProvider)),
+                  categories: Helpers.categoriesListToString(ref.read(selectedCategProvider)),
+                  persons: Helpers.categoriesListToString(ref.read(selectedPersonProvider)),
+                  year: yearCtlr.text,
+                  fromYear: fromYearCtlr.text,
+                  toYear: toYearCtlr.text,
+                );
+                context.pushNamed(AppRoutes.advancedResultsPage);
+              },
+              child: const Text('Buscar'),
+            ),
+          ),
+        ),
+      ],
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -77,7 +103,10 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Buscar por palabra clave'),
+                    Text(
+                      'Palabras claves',
+                      style: titleStyle,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outlined),
                       visualDensity: VisualDensity.compact,
@@ -88,23 +117,27 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                     ),
                   ],
                 ),
-                Wrap(
-                  children: List<Widget>.generate(
-                    ref.watch(selectedKewordsProvider).length,
-                    (int idx) {
-                      return CustomChip(
-                        text: ref.watch(selectedKewordsProvider)[idx].name,
-                        onTap: () {
-                          ref.read(selectedKewordsProvider.notifier).update((state) {
-                            var list = [...state];
-                            list.removeAt(idx);
-                            return list;
-                          });
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
+                ref.watch(selectedKewordsProvider).isEmpty
+                    ? Text('Filtrar por palabras claves', style: emptyStyle)
+                    : Wrap(
+                        children: List<Widget>.generate(
+                          ref.watch(selectedKewordsProvider).length,
+                          (int idx) {
+                            return CustomChip(
+                              text: ref.watch(selectedKewordsProvider)[idx].name,
+                              onTap: () {
+                                ref.read(selectedKewordsProvider.notifier).update((state) {
+                                  var list = [...state];
+                                  list.removeAt(idx);
+                                  return list;
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                      ),
+                const SizedBox(height: 10),
+                const Divider(thickness: 1, color: Colors.grey),
               ],
             ),
 
@@ -116,7 +149,10 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Buscar por año'),
+                    Text(
+                      'Años',
+                      style: titleStyle,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outlined),
                       visualDensity: VisualDensity.compact,
@@ -131,11 +167,14 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                     ),
                   ],
                 ),
-                if (_years() != null)
-                  CustomChip(
-                    text: _years()!,
-                    onTap: () => yearCtlr.clear(),
-                  ),
+                (_years() != null)
+                    ? CustomChip(
+                        text: _years()!,
+                        onTap: () => yearCtlr.clear(),
+                      )
+                    : Text('Filtrar por años', style: emptyStyle),
+                const SizedBox(height: 10),
+                const Divider(thickness: 1, color: Colors.grey),
               ],
             ),
 
@@ -147,7 +186,10 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Buscar por categorias'),
+                    Text(
+                      'Categorias',
+                      style: titleStyle,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outlined),
                       visualDensity: VisualDensity.compact,
@@ -158,23 +200,27 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                     ),
                   ],
                 ),
-                Wrap(
-                  children: List<Widget>.generate(
-                    ref.watch(selectedCategProvider).length,
-                    (int idx) {
-                      return CustomChip(
-                        text: ref.watch(selectedCategProvider)[idx].name,
-                        onTap: () {
-                          ref.read(selectedCategProvider.notifier).update((state) {
-                            var list = [...state];
-                            list.removeAt(idx);
-                            return list;
-                          });
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
+                ref.watch(selectedCategProvider).isEmpty
+                    ? Text('Filtrar por palabras categorias', style: emptyStyle)
+                    : Wrap(
+                        children: List<Widget>.generate(
+                          ref.watch(selectedCategProvider).length,
+                          (int idx) {
+                            return CustomChip(
+                              text: ref.watch(selectedCategProvider)[idx].name,
+                              onTap: () {
+                                ref.read(selectedCategProvider.notifier).update((state) {
+                                  var list = [...state];
+                                  list.removeAt(idx);
+                                  return list;
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                      ),
+                const SizedBox(height: 10),
+                const Divider(thickness: 1, color: Colors.grey),
               ],
             ),
 
@@ -186,7 +232,10 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Buscar por personas'),
+                    Text(
+                      'Personas',
+                      style: titleStyle,
+                    ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outlined),
                       visualDensity: VisualDensity.compact,
@@ -197,93 +246,76 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
                     ),
                   ],
                 ),
-                Wrap(
-                  children: List<Widget>.generate(
-                    ref.watch(selectedPersonProvider).length,
-                    (int idx) {
-                      return CustomChip(
-                        text: ref.watch(selectedPersonProvider)[idx].name,
-                        onTap: () {
-                          ref.read(selectedPersonProvider.notifier).update((state) {
-                            var list = [...state];
-                            list.removeAt(idx);
-                            return list;
-                          });
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
+                ref.watch(selectedPersonProvider).isEmpty
+                    ? Text('Filtrar por personas', style: emptyStyle)
+                    : Wrap(
+                        children: List<Widget>.generate(
+                          ref.watch(selectedPersonProvider).length,
+                          (int idx) {
+                            return CustomChip(
+                              text: ref.watch(selectedPersonProvider)[idx].name,
+                              onTap: () {
+                                ref.read(selectedPersonProvider.notifier).update((state) {
+                                  var list = [...state];
+                                  list.removeAt(idx);
+                                  return list;
+                                });
+                              },
+                            );
+                          },
+                        ).toList(),
+                      ),
+                const SizedBox(height: 10),
+                const Divider(thickness: 1, color: Colors.grey),
               ],
             ),
             const SizedBox(height: 20),
 
-            // BOTON BUSCAR //
-            SizedBox(
-              width: double.infinity,
-              height: 40,
-              child: Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    controller.getData(
-                      keyword: Helpers.categoriesListToString(ref.read(selectedKewordsProvider)),
-                      categories: Helpers.categoriesListToString(ref.read(selectedCategProvider)),
-                      persons: Helpers.categoriesListToString(ref.read(selectedPersonProvider)),
-                      year: yearCtlr.text,
-                      fromYear: fromYearCtlr.text,
-                      toYear: toYearCtlr.text,
-                    );
-                  },
-                  child: const Text('Buscar'),
-                ),
-              ),
-            ),
-
             // RESULTADOS //
-            const SizedBox(height: 20),
-            Visibility(
-              visible: (provider.value != null),
-              replacement: const Text(''),
-              child: provider.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) => Text('Error $error'),
-                data: (data) {
-                  return Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('${data.totalResults.toString()} resultados, ${data.totalPages.toString()} paginas'),
-                        const Divider(color: Colors.white),
-                        Expanded(
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            child: ListView.builder(
-                              itemCount: data.results.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (BuildContext context, int index) {
-                                return MovieTile(
-                                  movie: data.results[index],
-                                  height: 90,
-                                  onMovieSelected: () {
-                                    context.pushNamed(
-                                      AppRoutes.movieDetailsPage,
-                                      extra: data.results[index],
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
+            // const SizedBox(height: 20),
+            // Visibility(
+            //   visible: (provider.value != null),
+            //   replacement: const Text(''),
+            //   child: provider.when(
+            //     loading: () => const Center(child: CircularProgressIndicator()),
+            //     error: (error, stackTrace) => Text('Error $error'),
+            //     data: (data) {
+            //       return Expanded(
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.start,
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Text('${data.totalResults.toString()} resultados, ${data.totalPages.toString()} paginas'),
+            //             const Divider(color: Colors.white),
+            //             Expanded(
+            //               child: SingleChildScrollView(
+            //                 physics: const BouncingScrollPhysics(),
+            //                 child: ListView.builder(
+            //                   itemCount: data.results.length,
+            //                   shrinkWrap: true,
+            //                   physics: const NeverScrollableScrollPhysics(),
+            //                   itemBuilder: (BuildContext context, int index) {
+            //                     return MovieTile(
+            //                       movie: data.results[index],
+            //                       height: 90,
+            //                       onMovieSelected: () {
+            //                         context.pushNamed(
+            //                           AppRoutes.movieDetailsPage,
+            //                           extra: data.results[index],
+            //                         );
+            //                       },
+            //                     );
+            //                   },
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
 
             // WIDGET ENDS
           ],

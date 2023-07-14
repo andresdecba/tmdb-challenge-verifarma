@@ -10,7 +10,18 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
 
   SearchMoviesDelegate({
     required this.useCase,
-  });
+  }) : super(
+          searchFieldLabel: "Buscar un título",
+          searchFieldDecorationTheme: InputDecorationTheme(
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
+            isDense: true,
+            hintStyle: TextStyle(
+              color: Colors.grey.shade600,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        );
 
   final StreamController<List<Movie>> _debouncedMovies = StreamController.broadcast();
   final StreamController<bool> _isLoadingStream = StreamController.broadcast();
@@ -26,7 +37,7 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
     // debounce y llamar
     _cancelTimer();
     _debounceTimer = Timer(
-      const Duration(milliseconds: 666),
+      const Duration(milliseconds: 500),
       () async {
         final result = await useCase.call(query: query);
         result.fold(
@@ -49,9 +60,9 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
       initialData: init,
       stream: _debouncedMovies.stream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        final List<Movie> data = snapshot.data ?? [];
+        //final List<Movie> data = snapshot.data ?? [];
 
-        if (data.isEmpty) {
+        if (snapshot.data.isEmpty) {
           return _NoResultsItem(
             child: Text(
               'Sin resultados.',
@@ -63,14 +74,14 @@ class SearchMoviesDelegate extends SearchDelegate<Movie?> {
           return Padding(
             padding: const EdgeInsets.all(20),
             child: ListView.builder(
-              itemCount: data.length,
+              itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 return MovieTile(
-                  movie: data[index],
+                  movie: snapshot.data[index],
                   onMovieSelected: () {
                     close(
                       context,
-                      data[index],
+                      snapshot.data[index],
                     );
                     _cancelTimer();
                   },

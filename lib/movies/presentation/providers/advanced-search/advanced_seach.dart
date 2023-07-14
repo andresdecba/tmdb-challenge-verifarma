@@ -39,7 +39,7 @@ class AdvancedSearchAsyncController extends StateNotifier<AsyncValue<AdvancedMov
     //debouncer
     _cancelTimer();
     _debounceTimer = Timer(
-      const Duration(milliseconds: 666),
+      const Duration(milliseconds: 500),
       () async {
         final result = await useCase.call(
           categories: categories,

@@ -59,6 +59,8 @@ class MoviesDatasourceImpl extends MoviesDatasource {
         },
       );
 
+      print('holis---- \n ${dioResponse.data["results"]}');
+
       final result = List<Movie>.from(
         dioResponse.data["results"].map(
           (e) => mapper.movieMapper(

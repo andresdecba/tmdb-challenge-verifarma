@@ -51,13 +51,13 @@ class FavoriteProviderController extends StateNotifier<AsyncValue<List<Movie>>> 
     state = AsyncValue.data(devolver);
   }
 
-  void remove(Movie movie) {
+  void removeFav(Movie movie) {
     if (state.value == null) return;
     state.value!.remove(movie);
     state = AsyncValue.data(state.value!);
   }
 
-  void add(Movie movie) {
+  void addFav(Movie movie) {
     if (state.value == null) return;
     state.value!.add(movie);
     state = AsyncValue.data(state.value!);

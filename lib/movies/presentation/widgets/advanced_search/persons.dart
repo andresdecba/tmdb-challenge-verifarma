@@ -28,7 +28,7 @@ class _PersonsState extends ConsumerState<Persons> {
     _scrollController.addListener(() {
       if ((_scrollController.position.pixels + 100) >= _scrollController.position.maxScrollExtent) {
         cancelTimer();
-        _debounceTimer = Timer(const Duration(milliseconds: 666), () async {
+        _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
           ref.read(getPersonsProvider.notifier).nextPage();
           ref.read(getPersonsProvider.notifier).onDataChange(query: _txtController.text);
         });
@@ -72,7 +72,7 @@ class _PersonsState extends ConsumerState<Persons> {
             hintText: 'ej: Christian Bale',
             onChange: (text) {
               cancelTimer();
-              _debounceTimer = Timer(const Duration(milliseconds: 666), () async {
+              _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
                 ref.read(getPersonsProvider.notifier).onDataChange(query: _txtController.text);
               });
               providerCtlr.currentSearchValue = _txtController.text;

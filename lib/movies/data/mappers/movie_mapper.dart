@@ -17,16 +17,16 @@ class MovieMapper {
 
   Movie movieMapper(TMDBMovieModel movieDB) {
     return Movie(
-      id: movieDB.id,
       adult: movieDB.adult ?? false,
       backdropPath: (movieDB.backdropPath != null) ? 'https://image.tmdb.org/t/p/w500${movieDB.backdropPath}' : null,
-      genreIds: movieDB.genreIds ?? _noGenreIds,
+      id: movieDB.id,
       originalLanguage: movieDB.originalLanguage ?? '',
+      genreIds: movieDB.genreIds ?? _noGenreIds,
       originalTitle: movieDB.originalTitle ?? '',
       overview: movieDB.overview ?? '',
       popularity: movieDB.popularity ?? 0.0,
       posterPath: (movieDB.posterPath != null) ? 'https://image.tmdb.org/t/p/w500${movieDB.posterPath}' : null,
-      releaseDate: (movieDB.releaseDate != null) ? DateTime.parse(movieDB.releaseDate!) : null,
+      releaseDate: (movieDB.releaseDate == null || movieDB.releaseDate == "") ? null : DateTime.parse(movieDB.releaseDate!),
       title: movieDB.title ?? '',
       video: movieDB.video ?? false,
       voteAverage: movieDB.voteAverage ?? 0.0,

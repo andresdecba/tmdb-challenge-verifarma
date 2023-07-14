@@ -28,7 +28,7 @@ class _KeywordsState extends ConsumerState<Keywords> {
     _scrollController.addListener(() {
       if ((_scrollController.position.pixels + 100) >= _scrollController.position.maxScrollExtent) {
         cancelTimer();
-        _debounceTimer = Timer(const Duration(milliseconds: 666), () async {
+        _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
           ref.read(getKeywordsProvider.notifier).nextPage();
           ref.read(getKeywordsProvider.notifier).onDataChange(query: _txtController.text);
         });
@@ -72,7 +72,7 @@ class _KeywordsState extends ConsumerState<Keywords> {
             hintText: 'ej: dark night',
             onChange: (text) {
               cancelTimer();
-              _debounceTimer = Timer(const Duration(milliseconds: 666), () async {
+              _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
                 ref.read(getKeywordsProvider.notifier).onDataChange(query: _txtController.text);
               });
               providerCtlr.currentSearchValue = _txtController.text;

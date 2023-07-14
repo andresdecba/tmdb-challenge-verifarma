@@ -66,7 +66,7 @@ class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>
 
     _cancelTimer();
     _debounceTimer = Timer(
-      const Duration(milliseconds: 666),
+      const Duration(milliseconds: 500),
       () async {
         currentPage++;
         final result = await useCase.call(page: currentPage);
@@ -85,6 +85,22 @@ class GetMoviesListAsyncController extends StateNotifier<AsyncValue<List<Movie>>
         );
       },
     );
+  }
+
+  void removeFav(Movie movie) {
+    if (state.value == null) return;
+
+    var coso = state.value!.firstWhere((element) => element == movie);
+
+    coso.isFavorite = false;
+
+    state = AsyncValue.data(state.value!);
+  }
+
+  void addFav(Movie movie) {
+    if (state.value == null) return;
+    state.value!.add(movie);
+    state = AsyncValue.data(state.value!);
   }
 
   @override

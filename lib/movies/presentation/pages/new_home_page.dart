@@ -247,9 +247,7 @@ class _MoviesHorizontalList extends ConsumerWidget {
               movies: data,
               loadNextPage: () => nextPage(),
             ),
-            const SizedBox(
-              height: 20,
-            )
+            const SizedBox(height: 20)
           ],
         );
       },
@@ -273,6 +271,7 @@ class _SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
       width: double.infinity,
@@ -299,9 +298,21 @@ class _SearchBar extends StatelessWidget {
                   decoration: BoxDecoration(
                     //border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(50),
-                    color: Colors.white.withOpacity(0.20),
+                    color: Colors.white.withOpacity(0.25),
                   ),
-                  child: const Icon(Icons.search),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.search),
+                      const SizedBox(width: 20),
+                      Text(
+                        'Buscar en TMDB',
+                        style: textStyles.bodySmall!.copyWith(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
