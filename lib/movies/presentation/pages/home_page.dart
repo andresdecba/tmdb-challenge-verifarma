@@ -10,16 +10,16 @@ import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_provid
 import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
-import 'package:tmdb_challenge/movies/presentation/widgets/new_bottom_navigation.dart';
+import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
 
-class NewHome extends ConsumerStatefulWidget {
-  const NewHome({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _NewHomeState();
 }
 
-class _NewHomeState extends ConsumerState<NewHome> {
+class _NewHomeState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _NewHomeState extends ConsumerState<NewHome> {
     return Scaffold(
       appBar: customAppbar,
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: const NewBottomNavigation(),
+      bottomNavigationBar: const BottomNavigation(),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

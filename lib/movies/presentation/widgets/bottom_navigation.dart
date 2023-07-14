@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/favorites_provider.dart';
 
-class NewBottomNavigation extends ConsumerWidget {
-  const NewBottomNavigation({super.key});
+class BottomNavigation extends ConsumerWidget {
+  const BottomNavigation({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,7 +43,7 @@ class NewBottomNavigation extends ConsumerWidget {
   void _onTap({required BuildContext context, required int index, required WidgetRef ref}) {
     switch (index) {
       case 0:
-        context.goNamed(AppRoutes.newHome);
+        context.goNamed(AppRoutes.homePage);
         break;
       case 1:
         context.pushNamed(AppRoutes.favoritesPage);
