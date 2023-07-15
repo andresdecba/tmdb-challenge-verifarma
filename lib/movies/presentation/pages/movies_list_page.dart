@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/movies_lists.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_masonry.dart';
 

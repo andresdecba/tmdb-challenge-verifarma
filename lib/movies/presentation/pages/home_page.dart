@@ -7,7 +7,7 @@ import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_im
 import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
+import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_preview_providers.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
