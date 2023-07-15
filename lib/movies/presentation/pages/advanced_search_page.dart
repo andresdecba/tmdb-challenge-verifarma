@@ -14,7 +14,6 @@ import 'package:tmdb_challenge/movies/presentation/widgets/advanced_search/perso
 import 'package:tmdb_challenge/movies/presentation/widgets/advanced_search/years.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/custom_botomsheet.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/custom_chip.dart';
-import 'package:tmdb_challenge/movies/presentation/widgets/movie_tile.dart';
 
 class AdvancedSearchPage extends ConsumerStatefulWidget {
   const AdvancedSearchPage({super.key});
@@ -56,7 +55,6 @@ class SearchPageState extends ConsumerState<AdvancedSearchPage> {
   @override
   Widget build(BuildContext context) {
     var controller = ref.read(advancedSearchAsyncProvider.notifier);
-    var provider = ref.watch(advancedSearchAsyncProvider);
     final titleStyle = Theme.of(context).textTheme.titleMedium;
     final emptyStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
           color: Colors.grey.shade700,

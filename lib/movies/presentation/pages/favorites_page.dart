@@ -17,7 +17,6 @@ class _FavoritesPageState extends ConsumerState<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     final favs = ref.watch(favoriteProviderAsync);
-    final storage = ref.read(storageProvider);
     final textStyle = Theme.of(context).textTheme;
 
     return Scaffold(

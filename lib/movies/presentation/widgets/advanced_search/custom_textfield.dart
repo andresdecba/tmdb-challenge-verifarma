@@ -74,4 +74,4 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-typedef void OnChangeFnct(String text);
+typedef OnChangeFnct = void Function(String text);
