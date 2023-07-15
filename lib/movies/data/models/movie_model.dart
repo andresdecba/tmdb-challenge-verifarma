@@ -1,5 +1,5 @@
-class TMDBMovieModel {
-  const TMDBMovieModel({
+class MovieModel {
+  const MovieModel({
     this.adult,
     this.backdropPath,
     this.genreIds,
@@ -31,7 +31,7 @@ class TMDBMovieModel {
   final double? voteAverage;
   final int? voteCount;
 
-  factory TMDBMovieModel.fromJson(Map<String, dynamic> json) => TMDBMovieModel(
+  factory MovieModel.fromJson(Map<String, dynamic> json) => MovieModel(
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),

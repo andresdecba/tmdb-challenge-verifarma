@@ -6,6 +6,7 @@ import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dar
 import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 import 'package:tmdb_challenge/movies/domain/repositories/movies_repositoriy.dart';
 
@@ -17,9 +18,9 @@ class MovieRepositoryImpl extends MoviesRepository {
   final MoviesDatasource datasource;
 
   @override
-  Future<Either<Failure, List<Movie>>> getMoviesList({required int page, required String moviesList}) {
+  Future<Either<Failure, MoviesList>> getMoviesList({required int page, required String moviesList}) {
     return ApiNetwork.call(
-      () async => datasource.getMovies(
+      () async => datasource.getMoviesList(
         page: page,
         moviesList: moviesList,
       ),

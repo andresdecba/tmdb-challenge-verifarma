@@ -1,21 +1,23 @@
 import 'package:tmdb_challenge/movies/data/data_source_impl/storage_datasource_impl.dart';
-import 'package:tmdb_challenge/movies/data/models/advanced_movies_search_model.dart';
+import 'package:tmdb_challenge/movies/data/models/advanced_search_model.dart';
 import 'package:tmdb_challenge/movies/data/models/keyword_model.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_category_model.dart';
 import 'package:tmdb_challenge/movies/data/models/movie_detail_model.dart';
+import 'package:tmdb_challenge/movies/data/models/movies_list_model.dart';
 import 'package:tmdb_challenge/movies/data/models/person_details_model.dart';
-import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
+import 'package:tmdb_challenge/movies/data/models/movie_model.dart';
 import 'package:tmdb_challenge/movies/domain/data_source/storage_datasource.dart';
 import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dart';
 import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 
 class MovieMapper {
   final StorageDatasource _storage = StorageDatasourceImpl();
 
-  Movie movieMapper(TMDBMovieModel movieDB) {
+  Movie movieMapper(MovieModel movieDB) {
     return Movie(
       adult: movieDB.adult ?? false,
       backdropPath: (movieDB.backdropPath != null) ? 'https://image.tmdb.org/t/p/w500${movieDB.backdropPath}' : null,
@@ -32,6 +34,25 @@ class MovieMapper {
       voteAverage: movieDB.voteAverage ?? 0.0,
       voteCount: movieDB.voteCount ?? 0,
       isFavorite: isFavorite(movieDB.id),
+    );
+  }
+
+  MoviesList movieListMaper(MoviesListModel value) {
+    return MoviesList(
+      dates: (value.dates != null)
+          ? DatesList(
+              maximum: value.dates!.maximum,
+              minimum: value.dates!.maximum,
+            )
+          : null,
+      results: (value.results != null && value.results!.isNotEmpty)
+          ? List<Movie>.from(
+              value.results!.map((e) => movieMapper(e)),
+            )
+          : [],
+      page: value.page ?? 1,
+      totalPages: value.totalPages ?? 1,
+      totalResults: value.totalPages ?? 0,
     );
   }
 
@@ -55,7 +76,7 @@ class MovieMapper {
     );
   }
 
-  AdvancedMoviesSearch advancedMoviesSearchMapper(AdvancedMoviesSearchModel value) {
+  AdvancedMoviesSearch advancedMoviesSearchMapper(AdvancedSearchModel value) {
     return AdvancedMoviesSearch(
       page: value.page,
       results: value.results.isNotEmpty ? value.results.map((e) => movieMapper(e)).toList() : [],

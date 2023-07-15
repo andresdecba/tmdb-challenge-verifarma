@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
-import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_impl.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_providers.dart';
@@ -12,27 +13,11 @@ import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.d
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NewHomeState();
-}
-
-class _NewHomeState extends ConsumerState<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(nowPlayingAsync.notifier).nextPage();
-    ref.read(popularAsync.notifier).nextPage();
-    ref.read(topRatedAsync.notifier).nextPage();
-    ref.read(upcomingAsync.notifier).nextPage();
-    ref.read(trendingAsync.notifier).nextPage();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    //final textStyles = Theme.of(context).textTheme;
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: customAppbar,
       extendBodyBehindAppBar: true,
@@ -57,45 +42,41 @@ class _NewHomeState extends ConsumerState<HomePage> {
 
                   // NOW PLAYING
                   _MoviesHorizontalList(
-                    list: ref.watch(nowPlayingAsync),
-                    nextPage: () => ref.read(nowPlayingAsync.notifier).nextPage(),
+                    list: ref.watch(moviesListPreview(nowPlaying)),
                     title: 'En cartelera',
                     navigate: () => context.pushNamed(
-                      AppRoutes.moviesList,
-                      extra: {"list": ref.read(nowPlayingAsync), "title": 'En cartelera'},
-                    ),
-                  ),
-
-                  // POPULAR
-                  _MoviesHorizontalList(
-                    list: ref.watch(popularAsync),
-                    nextPage: () => ref.read(popularAsync.notifier).nextPage(),
-                    title: 'Más populares',
-                    navigate: () => context.pushNamed(
-                      AppRoutes.moviesList,
-                      extra: {"list": ref.read(popularAsync), "title": 'Más populares'},
-                    ),
-                  ),
-
-                  // TOP RATED
-                  _MoviesHorizontalList(
-                    list: ref.watch(topRatedAsync),
-                    nextPage: () => ref.read(topRatedAsync.notifier).nextPage(),
-                    title: 'Mejores ranqueadas',
-                    navigate: () => context.pushNamed(
-                      AppRoutes.moviesList,
-                      extra: {"list": ref.read(topRatedAsync), "title": 'Mejores ranqueadas'},
+                      AppRoutes.moviesListPage,
+                      extra: {"moviesList": nowPlaying, "title": 'En cartelera'},
                     ),
                   ),
 
                   // UPCOMING
                   _MoviesHorizontalList(
-                    list: ref.watch(upcomingAsync),
-                    nextPage: () => ref.read(upcomingAsync.notifier).nextPage(),
+                    list: ref.watch(moviesListPreview(upcoming)),
                     title: 'Próximos estrenos',
                     navigate: () => context.pushNamed(
-                      AppRoutes.moviesList,
-                      extra: {"list": ref.read(upcomingAsync), "title": 'Próximos estrenos'},
+                      AppRoutes.moviesListPage,
+                      extra: {"moviesList": upcoming, "title": 'Próximos estrenos'},
+                    ),
+                  ),
+
+                  // TOP RATED
+                  _MoviesHorizontalList(
+                    list: ref.watch(moviesListPreview(topRated)),
+                    title: 'Mejores ranqueadas',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesListPage,
+                      extra: {"moviesList": topRated, "title": 'Mejores ranqueadas'},
+                    ),
+                  ),
+
+                  // POPULAR
+                  _MoviesHorizontalList(
+                    list: ref.watch(moviesListPreview(popular)),
+                    title: 'Más populares',
+                    navigate: () => context.pushNamed(
+                      AppRoutes.moviesListPage,
+                      extra: {"moviesList": popular, "title": 'Más populares'},
                     ),
                   ),
                 ],
@@ -111,13 +92,13 @@ class _NewHomeState extends ConsumerState<HomePage> {
 class _CarouselSlider extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
-    final moviesList = ref.watch(trendingAsync);
+    final moviesList = ref.watch(tendingMoviesPreview);
     double height = MediaQuery.of(context).size.height * 0.35;
     final textStyles = Theme.of(context).textTheme;
 
     return moviesList.when(
       data: (data) {
-        var items = data.map((e) {
+        var items = data!.map((e) {
           var idx = data.indexOf(e) + 1;
           return MoviePoster(
             posterPath: e.posterPath,
@@ -206,13 +187,11 @@ class _CarouselSlider extends ConsumerWidget {
 class _MoviesHorizontalList extends ConsumerWidget {
   const _MoviesHorizontalList({
     required this.list,
-    required this.nextPage,
     required this.title,
     required this.navigate,
   });
 
-  final AsyncValue<List<Movie>> list;
-  final VoidCallback nextPage;
+  final AsyncValue<MoviesList?> list;
   final String title;
   final VoidCallback navigate;
 
@@ -226,6 +205,7 @@ class _MoviesHorizontalList extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // title
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -243,9 +223,10 @@ class _MoviesHorizontalList extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 10),
+            // movies
             HorizontalListView(
-              movies: data,
-              loadNextPage: () => nextPage(),
+              movies: data!.results,
+              onNavigate: () => navigate(),
             ),
             const SizedBox(height: 20)
           ],

@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/login/presentation/pages/login_page.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/advanced_results_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/favorites_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/advanced_search_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
-import 'package:tmdb_challenge/movies/presentation/pages/movies_list.dart';
+import 'package:tmdb_challenge/movies/presentation/pages/movies_list_page.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
@@ -20,11 +21,11 @@ class AppRoutes {
   static const favoritesPage = 'favoritesPage';
   static const filterSearchPage = 'filterSearchPage';
   static const homePage = 'homePage';
-  static const moviesList = 'moviesList';
+  static const moviesListPage = 'moviesListPage';
   static const advancedResultsPage = 'advancedResultsPage';
 
   static final appRoutes = GoRouter(
-    initialLocation: '/loginPage',
+    initialLocation: '/homePage', //'/loginPage',
     navigatorKey: rootNavigatorKey,
     routes: [
       // routes
@@ -39,7 +40,7 @@ class AppRoutes {
         builder: (context, state) => const FavoritesPage(),
       ),
       GoRoute(
-        path: '/jome',
+        path: '/homePage',
         name: homePage,
         builder: (context, state) => const HomePage(),
       ),
@@ -64,13 +65,13 @@ class AppRoutes {
       ),
 
       GoRoute(
-        path: '/moviesList',
-        name: moviesList,
+        path: '/moviesListPage',
+        name: moviesListPage,
         builder: (context, state) {
           Map<String, dynamic> args = state.extra as Map<String, dynamic>;
-          return MoviesList(
+          return MoviesListPage(
             title: args['title'],
-            value: args['list'] as AsyncValue<List<Movie>>, // state.extra as AsyncValue<List<Movie>>,
+            moviesList: args['moviesList'],
           );
         },
       ),

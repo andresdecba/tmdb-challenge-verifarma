@@ -55,7 +55,7 @@ class _MoviesGridViewState extends State<MoviesGridView> {
               const SizedBox(height: 20),
               MoviePoster(
                 posterPath: widget.movies[index].posterPath,
-                height: 180,
+                //height: 150,
                 onTap: () => context.pushNamed(
                   AppRoutes.movieDetailsPage,
                   extra: widget.movies[index],
@@ -66,7 +66,7 @@ class _MoviesGridViewState extends State<MoviesGridView> {
         }
         return MoviePoster(
           posterPath: widget.movies[index].posterPath,
-          height: 180,
+          //height: 150,
           onTap: () => context.pushNamed(
             AppRoutes.movieDetailsPage,
             extra: widget.movies[index],

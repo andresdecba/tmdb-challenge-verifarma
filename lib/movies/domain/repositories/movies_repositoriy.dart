@@ -4,10 +4,11 @@ import 'package:tmdb_challenge/movies/domain/entities/advanced_movies_search.dar
 import 'package:tmdb_challenge/movies/domain/entities/keyword.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movie_category.dart';
+import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 
 abstract class MoviesRepository {
-  Future<Either<Failure, List<Movie>>> getMoviesList({required int page, required String moviesList});
+  Future<Either<Failure, MoviesList>> getMoviesList({required int page, required String moviesList});
   Future<Either<Failure, List<Movie>>> searchMovies({required String query});
   Future<Either<Failure, Movie>> getMovie({required String movieId});
   Future<Either<Failure, AdvancedMoviesSearch>> advancedMoviesSearch({

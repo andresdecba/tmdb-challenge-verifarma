@@ -1,21 +1,21 @@
-import 'package:tmdb_challenge/movies/data/models/tmdb_movie_model.dart';
+import 'package:tmdb_challenge/movies/data/models/movie_model.dart';
 
-class AdvancedMoviesSearchModel {
+class AdvancedSearchModel {
   final int page;
-  final List<TMDBMovieModel> results;
+  final List<MovieModel> results;
   final int totalPages;
   final int totalResults;
 
-  AdvancedMoviesSearchModel({
+  AdvancedSearchModel({
     required this.page,
     required this.results,
     required this.totalPages,
     required this.totalResults,
   });
 
-  factory AdvancedMoviesSearchModel.fromJson(Map<String, dynamic> json) => AdvancedMoviesSearchModel(
+  factory AdvancedSearchModel.fromJson(Map<String, dynamic> json) => AdvancedSearchModel(
         page: json["page"],
-        results: List<TMDBMovieModel>.from(json["results"].map((x) => TMDBMovieModel.fromJson(x))),
+        results: List<MovieModel>.from(json["results"].map((x) => MovieModel.fromJson(x))),
         totalPages: json["total_pages"],
         totalResults: json["total_results"],
       );
