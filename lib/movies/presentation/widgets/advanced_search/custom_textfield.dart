@@ -7,7 +7,7 @@ class CustomTextField extends StatelessWidget {
     this.onChange,
     this.hintText,
     this.keyboardType,
-    this.icon,
+    this.leading,
     this.labelText,
     this.onTap,
   });
@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
   final OnChangeFnct? onChange;
   final String? hintText;
   final TextInputType? keyboardType;
-  final IconData? icon;
+  final Widget? leading;
   final String? labelText;
   final VoidCallback? onTap;
 
@@ -31,42 +31,48 @@ class CustomTextField extends StatelessWidget {
             color: Colors.grey.shade900,
             borderRadius: const BorderRadius.all(Radius.circular(50)),
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Row(
-              children: [
-                Icon(
-                  icon ?? Icons.search,
-                  color: Colors.grey,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Center(
-                    child: TextField(
-                      controller: txtController,
-                      style: const TextStyle(color: Colors.white),
-                      keyboardType: keyboardType ?? TextInputType.text,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        isDense: true,
-                        hintText: hintText,
-                        labelText: labelText,
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontStyle: FontStyle.italic,
-                        ),
+          child: Row(
+            children: [
+              leading ??
+                  const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Center(
+                  child: TextField(
+                    controller: txtController,
+                    style: const TextStyle(color: Colors.white),
+                    keyboardType: keyboardType ?? TextInputType.text,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      isDense: true,
+                      hintText: hintText,
+                      labelText: labelText,
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
                       ),
-                      onEditingComplete: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
-                      onChanged: onChange != null ? (text) => onChange!(text) : null,
-                      onTap: onTap != null ? () => onTap!() : null,
                     ),
+                    onEditingComplete: () {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                    },
+                    onChanged: onChange != null ? (text) => onChange!(text) : null,
+                    onTap: onTap != null ? () => onTap!() : null,
                   ),
                 ),
-              ],
-            ),
+              ),
+              if (txtController.text.isNotEmpty)
+                IconButton(
+                  onPressed: () => txtController.clear(),
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.grey,
+                  ),
+                ),
+            ],
           ),
         ),
       ),

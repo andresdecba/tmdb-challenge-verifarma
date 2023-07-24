@@ -52,7 +52,7 @@ class MovieMapper {
           : [],
       page: value.page ?? 1,
       totalPages: value.totalPages ?? 1,
-      totalResults: value.totalPages ?? 0,
+      totalResults: value.totalResults ?? 0,
     );
   }
 

@@ -45,7 +45,7 @@ class _YearsState extends State<Years> {
           CustomTextField(
             txtController: widget.yearCtlr,
             keyboardType: TextInputType.number,
-            icon: Icons.numbers,
+            leading: const Icon(Icons.numbers),
             hintText: 'ej: 2012',
             onTap: () {
               setState(() {
@@ -85,7 +85,7 @@ class _YearsState extends State<Years> {
                     CustomTextField(
                       txtController: widget.fromYearCtlr,
                       keyboardType: TextInputType.number,
-                      icon: Icons.numbers,
+                      leading: const Icon(Icons.numbers),
                       hintText: 'ej: 2002',
                       onTap: () {
                         setState(() {
@@ -116,7 +116,7 @@ class _YearsState extends State<Years> {
                     CustomTextField(
                       txtController: widget.toYearCtlr,
                       keyboardType: TextInputType.number,
-                      icon: Icons.numbers,
+                      leading: const Icon(Icons.numbers),
                       hintText: 'ej: 2012',
                       onTap: () {
                         setState(() {

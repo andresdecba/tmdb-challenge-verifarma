@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
-import 'package:tmdb_challenge/movies/presentation/widgets/movie_masonry.dart';
 
-class MoviesListPage extends ConsumerStatefulWidget {
-  const MoviesListPage({
+class Paginator extends ConsumerStatefulWidget {
+  const Paginator({
     required this.title,
-    required this.moviesList,
+    required this.onPageChanged,
+    required this.itemBuilder,
     super.key,
   });
 
   final String title;
-  final String moviesList;
+  final ItemBuilder itemBuilder;
+  final OnPageChanged onPageChanged;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _MoviesListPageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _PaginatorState();
 }
 
-class _MoviesListPageState extends ConsumerState<MoviesListPage> {
+class _PaginatorState extends ConsumerState<Paginator> {
   late PageController pageCtlr;
 
   @override
   void initState() {
     super.initState();
     pageCtlr = PageController();
-    ref.read(moviesList(widget.moviesList).notifier).onPageChanged(1);
   }
 
   @override
@@ -40,10 +39,6 @@ class _MoviesListPageState extends ConsumerState<MoviesListPage> {
   @override
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
-
-    final movies = ref.watch(moviesList(widget.moviesList));
-    final moviesNotifier = ref.read(moviesList(widget.moviesList).notifier);
-
     return Scaffold(
       appBar: customAppbar,
       body: Padding(
@@ -91,26 +86,27 @@ class _MoviesListPageState extends ConsumerState<MoviesListPage> {
                 pageSnapping: true,
                 // CHANGE
                 onPageChanged: (value) {
-                  moviesNotifier.onPageChanged(value + 1);
-                  setState(() {
-                    currentPage = value + 1;
-                  });
+                  // widget.onPageChanged(value);
+                  // setState(() {
+                  //   currentPage = value + 1;
+                  // });
                 },
                 // BUILD
                 itemBuilder: (context, index) {
-                  return movies.when(
-                    data: (data) {
-                      totalPages = data.totalPages;
-                      return MoviesGridView(
-                        movies: data.results,
-                        loadNextPage: () {},
-                      );
-                    },
-                    error: (error, stackTrace) => Text(error.toString()),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  // return movies.when(
+                  //   data: (data) {
+                  //     totalPages = data.totalPages;
+
+                  //     return MoviesGridView(
+                  //       movies: data.results,
+                  //       loadNextPage: () {},
+                  //     );
+                  //   },
+                  //   error: (error, stackTrace) => Text(error.toString()),
+                  //   loading: () => const Center(
+                  //     child: CircularProgressIndicator(),
+                  //   ),
+                  // );
                 },
               ),
             ),
@@ -120,3 +116,6 @@ class _MoviesListPageState extends ConsumerState<MoviesListPage> {
     );
   }
 }
+
+typedef ItemBuilder = void Function(BuildContext context, int index);
+typedef OnPageChanged = void Function(int value);

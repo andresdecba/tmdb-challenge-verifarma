@@ -6,11 +6,8 @@ import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
 import 'package:tmdb_challenge/movies/domain/entities/person_details.dart';
 
 abstract class MoviesDatasource {
-  //Future<List<Movie>> getMoviesList({required int page, required String moviesList});
-
   Future<MoviesList> getMoviesList({required int page, required String moviesList});
-
-  Future<List<Movie>> searchMovies({required String query});
+  Future<MoviesList> searchMoviesByTitle({required int page, required String query});
   Future<Movie> getMovie({required String movieId});
   Future<AdvancedMoviesSearch> advancedMoviesSearch({
     String? keyWord,

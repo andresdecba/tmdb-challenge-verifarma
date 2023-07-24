@@ -8,6 +8,7 @@ import 'package:tmdb_challenge/movies/presentation/pages/movie_details_page.dart
 import 'package:tmdb_challenge/movies/presentation/pages/advanced_search_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/home_page.dart';
 import 'package:tmdb_challenge/movies/presentation/pages/movies_list_page.dart';
+import 'package:tmdb_challenge/movies/presentation/pages/search_by_title_page.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'shell');
@@ -21,6 +22,7 @@ class AppRoutes {
   static const homePage = 'homePage';
   static const moviesListPage = 'moviesListPage';
   static const advancedResultsPage = 'advancedResultsPage';
+  static const searchMovieByTitlePage = 'searchMovieByTitlePage';
 
   static final appRoutes = GoRouter(
     initialLocation: '/homePage', //'/loginPage',
@@ -60,6 +62,12 @@ class AppRoutes {
         path: '/advancedResultsPage',
         name: advancedResultsPage,
         builder: (context, state) => const AdvancedResultsPage(),
+      ),
+
+      GoRoute(
+        path: '/searchMovieByTitlePage',
+        name: searchMovieByTitlePage,
+        builder: (context, state) => const SearchMovieByTitlePage(),
       ),
 
       GoRoute(

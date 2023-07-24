@@ -52,23 +52,20 @@ class MoviesDatasourceImpl extends MoviesDatasource {
   }
 
   @override
-  Future<List<Movie>> searchMovies({required String query}) async {
-    if (query.isEmpty) return [];
+  Future<MoviesList> searchMoviesByTitle({required int page, required String query}) async {
+    //if (query.isEmpty) return [];
     final dio = await DioClient.callDio();
     try {
       final dioResponse = await dio.get(
         '/search/movie',
         queryParameters: {
           'query': query.trim(),
+          'page': page,
         },
       );
 
-      final result = List<Movie>.from(
-        dioResponse.data["results"].map(
-          (e) => mapper.movieMapper(
-            MovieModel.fromJson(e),
-          ),
-        ),
+      final result = mapper.movieListMaper(
+        MoviesListModel.fromJson(dioResponse.data),
       );
 
       return result;

@@ -5,10 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:tmdb_challenge/core/routes/routes.dart';
 import 'package:tmdb_challenge/movies/data/data_source_impl/movies_datasource_impl.dart';
 import 'package:tmdb_challenge/movies/domain/entities/movies_list.dart';
-import 'package:tmdb_challenge/movies/presentation/delegates/search_delegate.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/appbar.dart';
 import 'package:tmdb_challenge/movies/presentation/providers/movies_lists_preview_providers.dart';
-import 'package:tmdb_challenge/movies/presentation/providers/search_delegate_provider.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/horizontal_listview.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/movie_poster.dart';
 import 'package:tmdb_challenge/movies/presentation/widgets/bottom_navigation.dart';
@@ -261,17 +259,7 @@ class _SearchBar extends StatelessWidget {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  // SEARCH MOVIES //
-                  final searchMovies = ref.read(searchMoviesProvider);
-                  showSearch(
-                    context: context,
-                    delegate: SearchMoviesDelegate(useCase: searchMovies),
-                  ).then((value) {
-                    if (value == null) return;
-                    context.pushNamed(AppRoutes.movieDetailsPage, extra: value);
-                  });
-                },
+                onTap: () => context.pushNamed(AppRoutes.searchMovieByTitlePage),
                 child: Container(
                   height: 35,
                   padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),

@@ -28,9 +28,9 @@ class MovieRepositoryImpl extends MoviesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> searchMovies({required String query}) {
+  Future<Either<Failure, MoviesList>> searchMoviesByTitle({required int page, required String query}) {
     return ApiNetwork.call(
-      () async => datasource.searchMovies(query: query),
+      () async => datasource.searchMoviesByTitle(query: query, page: page),
     );
   }
 
